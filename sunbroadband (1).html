@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sun Broadband — Fiber Internet + OTT in Raipur</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --brand: #E8500A;
+  --brand2: #F97316;
+  --bg: #FFFFFF;
+  --bg-soft: #F9FAFB;
+  --bg-dark: #0A0A0A;
+  --text: #111827;
+  --muted: #6B7280;
+  --light: #F3F4F6;
+  --border: #E5E7EB;
+  --green: #16A34A;
+  --hero-dark: #0C0C0E;
+}
+
+html { scroll-behavior: smooth; }
+body { font-family: 'Plus Jakarta Sans', sans-serif; color: var(--text); background: #fff; overflow-x: hidden; }
+
+/* NAV */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 6%; height: 64px;
+  background: rgba(255,255,255,0.96);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  transition: box-shadow 0.3s;
+}
+.nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.08); }
+.logo {
+  display: flex; align-items: center; gap: 9px;
+  font-size: 1.15rem; font-weight: 800; color: var(--text); text-decoration: none;
+  letter-spacing: -0.3px;
+}
+.logo-icon {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: var(--brand);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; color: #fff;
+}
+.logo-text span { color: var(--brand); }
+.nav-links { display: flex; align-items: center; gap: 2rem; list-style: none; }
+.nav-links a { font-size: 0.875rem; font-weight: 500; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.nav-links a:hover { color: var(--text); }
+.nav-right { display: flex; align-items: center; gap: 14px; }
+.nav-call { font-size: 0.82rem; font-weight: 600; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.nav-call:hover { color: var(--text); }
+.btn-nav {
+  background: var(--brand); color: #fff;
+  padding: 9px 20px; border-radius: 8px;
+  font-size: 0.85rem; font-weight: 700; text-decoration: none;
+  transition: opacity 0.2s, transform 0.15s;
+  letter-spacing: -0.1px;
+}
+.btn-nav:hover { opacity: 0.9; transform: translateY(-1px); }
+
+/* HERO */
+.hero {
+  background: var(--hero-dark);
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  padding-top: 64px;
+  position: relative; overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  width: 900px; height: 600px;
+  background: radial-gradient(ellipse, rgba(232,80,10,0.2) 0%, transparent 60%);
+  top: 5%; left: -15%;
+  pointer-events: none;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  width: 500px; height: 400px;
+  background: radial-gradient(ellipse, rgba(249,115,22,0.08) 0%, transparent 65%);
+  bottom: 10%; right: 5%;
+  pointer-events: none;
+}
+.hero-body {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 60px 6% 48px;
+  position: relative; z-index: 2; text-align: center;
+}
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 100px; padding: 6px 18px;
+  font-size: 0.75rem; font-weight: 600;
+  color: rgba(255,255,255,0.65); letter-spacing: 0.5px; text-transform: uppercase;
+  margin-bottom: 2rem;
+  animation: fadeUp 0.6s ease both;
+}
+.live-dot { width: 6px; height: 6px; border-radius: 50%; background: #22C55E; animation: blink 2s infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+.hero h1 {
+  font-size: clamp(2.4rem, 4.8vw, 3.8rem);
+  font-weight: 800; line-height: 1.1; letter-spacing: -1.5px;
+  color: #fff; max-width: 740px; margin-bottom: 1.25rem;
+  animation: fadeUp 0.6s 0.1s ease both;
+}
+.hero h1 em { font-style: normal; color: var(--brand2); }
+
+.hero-sub {
+  font-size: 1rem; color: rgba(255,255,255,0.48);
+  max-width: 500px; margin: 0 auto 2.5rem;
+  font-weight: 400; line-height: 1.8;
+  animation: fadeUp 0.6s 0.2s ease both;
+}
+.hero-btns {
+  display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+  margin-bottom: 52px;
+  animation: fadeUp 0.6s 0.25s ease both;
+}
+.btn-hp { background: var(--brand); color: #fff; padding: 14px 28px; border-radius: 10px; font-size: 0.9rem; font-weight: 700; text-decoration: none; transition: all 0.2s; }
+.btn-hp:hover { background: var(--brand2); transform: translateY(-2px); box-shadow: 0 12px 32px rgba(232,80,10,0.38); }
+.btn-hg { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.15); color: rgba(255,255,255,0.85); padding: 14px 28px; border-radius: 10px; font-size: 0.9rem; font-weight: 600; text-decoration: none; transition: all 0.2s; }
+.btn-hg:hover { background: rgba(255,255,255,0.11); }
+
+/* OTT Showcase */
+.ott-showcase { width: 100%; max-width: 900px; margin: 0 auto; animation: fadeUp 0.7s 0.35s ease both; }
+.ott-label-row { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; justify-content: center; }
+.ott-label-row .line { flex: 1; max-width: 110px; height: 1px; background: rgba(255,255,255,0.08); }
+.ott-label-row span { font-size: 0.72rem; font-weight: 600; color: rgba(255,255,255,0.3); text-transform: uppercase; letter-spacing: 1.2px; }
+.ott-pills { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+
+.ott-pill {
+  display: flex; align-items: center; gap: 10px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.09);
+  border-radius: 12px; padding: 11px 16px;
+  transition: all 0.2s; cursor: default;
+}
+.ott-pill:hover { background: rgba(255,255,255,0.09); border-color: rgba(255,255,255,0.18); transform: translateY(-2px); }
+.pill-icon { width: 34px; height: 34px; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 17px; }
+.pill-name { font-size: 0.82rem; font-weight: 600; color: rgba(255,255,255,0.88); }
+.pill-sub { font-size: 0.68rem; color: rgba(255,255,255,0.37); margin-top: 1px; }
+.pill-tag { font-size: 0.6rem; font-weight: 700; background: var(--brand); color: #fff; padding: 2px 7px; border-radius: 100px; margin-left: 4px; text-transform: uppercase; }
+.ott-more-pill { display: flex; align-items: center; padding: 11px 16px; background: rgba(255,255,255,0.03); border: 1px dashed rgba(255,255,255,0.1); border-radius: 12px; font-size: 0.78rem; color: rgba(255,255,255,0.35); }
+
+/* Stat bar */
+.stat-bar { background: rgba(255,255,255,0.035); border-top: 1px solid rgba(255,255,255,0.07); display: flex; position: relative; z-index: 2; }
+.stat-item { flex: 1; padding: 22px 0; text-align: center; border-right: 1px solid rgba(255,255,255,0.07); }
+.stat-item:last-child { border-right: none; }
+.stat-num { font-size: 1.55rem; font-weight: 800; color: #fff; letter-spacing: -0.5px; line-height: 1; }
+.stat-num sub { font-size: 0.95rem; color: var(--brand2); vertical-align: baseline; font-weight: 600; }
+.stat-label { font-size: 0.72rem; color: rgba(255,255,255,0.35); margin-top: 4px; }
+
+@keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+
+/* TICKER */
+.ticker { background: var(--brand); padding: 11px 0; overflow: hidden; }
+.ticker-track { display: flex; gap: 3rem; animation: tickmove 24s linear infinite; white-space: nowrap; }
+@keyframes tickmove { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+.tick-item { font-size: 0.78rem; font-weight: 600; color: rgba(255,255,255,0.88); }
+.tick-item::before { content: '✦  '; opacity: 0.55; }
+
+/* SECTION COMMON */
+.sec { padding: 88px 6%; }
+.sec-inner { max-width: 1160px; margin: 0 auto; }
+.sec-center { text-align: center; }
+.eyebrow { display: inline-block; font-size: 0.7rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--brand); margin-bottom: 14px; }
+.sec-h { font-size: clamp(1.75rem, 3vw, 2.6rem); font-weight: 800; letter-spacing: -0.75px; line-height: 1.15; color: var(--text); margin-bottom: 14px; }
+.sec-p { font-size: 0.97rem; color: var(--muted); max-width: 520px; line-height: 1.78; font-weight: 400; }
+
+/* WHY GRID */
+.why-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; margin-top: 48px; }
+.why-cell { background: #fff; padding: 2.25rem 2rem; transition: background 0.2s; }
+.why-cell:hover { background: var(--bg-soft); }
+.why-ic { width: 42px; height: 42px; border-radius: 10px; background: #FFF3EE; display: flex; align-items: center; justify-content: center; font-size: 19px; margin-bottom: 1.1rem; }
+.why-title { font-size: 0.97rem; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+.why-desc { font-size: 0.83rem; color: var(--muted); line-height: 1.68; }
+
+/* PLANS */
+.plans-sec { background: var(--bg-soft); }
+.plans-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; max-width: 980px; margin: 0 auto; }
+
+.plan-card { background: #fff; border: 1.5px solid var(--border); border-radius: 20px; padding: 2rem 1.75rem; display: flex; flex-direction: column; position: relative; transition: transform 0.25s, box-shadow 0.25s; }
+.plan-card:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(0,0,0,0.09); }
+.plan-card.pop { border-color: var(--brand); box-shadow: 0 0 0 1px var(--brand); }
+.pop-label { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--brand); color: #fff; font-size: 0.68rem; font-weight: 700; padding: 4px 16px; border-radius: 100px; letter-spacing: 0.5px; text-transform: uppercase; white-space: nowrap; }
+
+.plan-tier { display: inline-block; background: #FFF3EE; color: var(--brand); font-size: 0.68rem; font-weight: 700; padding: 3px 10px; border-radius: 6px; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.5px; }
+.plan-tier.f { background: var(--brand); color: #fff; }
+.plan-name { font-size: 1.15rem; font-weight: 800; color: var(--text); margin-bottom: 4px; }
+.plan-speed { font-size: 0.8rem; color: var(--muted); margin-bottom: 1.25rem; }
+.plan-speed strong { color: var(--brand); font-weight: 700; }
+.price-row { display: flex; align-items: baseline; gap: 3px; margin-bottom: 4px; }
+.p-sym { font-size: 1.1rem; font-weight: 600; color: var(--text); align-self: flex-start; margin-top: 5px; }
+.p-amt { font-size: 2.8rem; font-weight: 800; color: var(--text); line-height: 1; letter-spacing: -1px; }
+.p-per { font-size: 0.78rem; color: var(--muted); align-self: flex-end; margin-bottom: 4px; }
+.p-gst { font-size: 0.73rem; color: var(--muted); margin-bottom: 1.5rem; }
+.p-div { height: 1px; background: var(--border); margin: 1.2rem 0; }
+
+.p-feats { list-style: none; display: flex; flex-direction: column; gap: 10px; flex: 1; margin-bottom: 1.5rem; }
+.p-feats li { display: flex; align-items: flex-start; gap: 9px; font-size: 0.84rem; color: var(--muted); }
+.p-feats .ck { color: var(--green); font-size: 0.88rem; flex-shrink: 0; margin-top: 1px; }
+.p-feats strong { color: var(--text); font-weight: 600; }
+.mini-chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 5px; }
+.mc { background: var(--bg-soft); border: 1px solid var(--border); border-radius: 5px; padding: 2px 7px; font-size: 0.66rem; font-weight: 600; color: var(--text); }
+
+.p-btn { display: block; text-align: center; padding: 13px; border-radius: 10px; font-size: 0.88rem; font-weight: 700; text-decoration: none; transition: all 0.2s; }
+.p-btn.pri { background: var(--brand); color: #fff; }
+.p-btn.pri:hover { background: #D94408; box-shadow: 0 6px 20px rgba(232,80,10,0.3); }
+.p-btn.out { border: 1.5px solid var(--border); color: var(--text); }
+.p-btn.out:hover { border-color: var(--brand); color: var(--brand); }
+.plans-note { text-align: center; font-size: 0.78rem; color: var(--muted); margin-top: 24px; }
+
+/* OTT DARK SECTION */
+.ott-dark { background: var(--bg-dark); }
+.ott-wrap { display: grid; grid-template-columns: 1fr 460px; gap: 80px; align-items: center; max-width: 1160px; margin: 0 auto; }
+.ott-left .eyebrow { color: var(--brand2); }
+.ott-left .sec-h { color: #fff; }
+.ott-left .sec-p { color: rgba(255,255,255,0.42); max-width: 420px; }
+.ott-counts { display: flex; gap: 40px; margin: 1.75rem 0 2rem; }
+.oc-num { font-size: 2.4rem; font-weight: 800; color: var(--brand2); letter-spacing: -1px; line-height: 1; }
+.oc-label { font-size: 0.76rem; color: rgba(255,255,255,0.37); margin-top: 3px; }
+
+.ott-list { display: flex; flex-direction: column; }
+.ott-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
+.ott-row:last-child { border: none; }
+.ott-row-left { display: flex; align-items: center; gap: 10px; }
+.ott-sm-icon { width: 30px; height: 30px; border-radius: 7px; background: rgba(255,255,255,0.07); display: flex; align-items: center; justify-content: center; font-size: 15px; }
+.ott-row-name { font-size: 0.875rem; font-weight: 600; color: rgba(255,255,255,0.88); }
+.ott-row-type { font-size: 0.72rem; color: rgba(255,255,255,0.35); margin-top: 1px; }
+.ott-chip { font-size: 0.65rem; font-weight: 700; padding: 3px 9px; border-radius: 100px; background: rgba(232,80,10,0.14); color: var(--brand2); border: 1px solid rgba(232,80,10,0.28); }
+
+.ott-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.ott-c { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 1.25rem 1.1rem; transition: all 0.2s; }
+.ott-c:hover { background: rgba(255,255,255,0.07); border-color: rgba(255,255,255,0.14); }
+.ott-c.wide { grid-column: span 2; }
+.ott-c-icon { font-size: 1.8rem; margin-bottom: 8px; }
+.ott-c-name { font-size: 0.9rem; font-weight: 700; color: #fff; margin-bottom: 3px; }
+.ott-c-type { font-size: 0.72rem; color: rgba(255,255,255,0.35); }
+.ott-c-plan { display: inline-block; margin-top: 10px; font-size: 0.65rem; font-weight: 700; color: var(--brand2); background: rgba(249,115,22,0.1); border: 1px solid rgba(249,115,22,0.22); padding: 2px 8px; border-radius: 100px; }
+
+/* COVERAGE */
+.cov-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; max-width: 1160px; margin: 0 auto; }
+.area-list { display: flex; flex-direction: column; gap: 8px; }
+.area-row { display: flex; align-items: center; justify-content: space-between; padding: 13px 16px; background: var(--bg-soft); border: 1px solid var(--border); border-radius: 11px; transition: all 0.2s; }
+.area-row:hover { border-color: #fbc8aa; background: #FFF8F5; }
+.area-l { display: flex; align-items: center; gap: 11px; }
+.area-name { font-size: 0.875rem; font-weight: 600; color: var(--text); }
+.area-type { font-size: 0.72rem; color: var(--muted); }
+.live-b { display: flex; align-items: center; gap: 5px; font-size: 0.7rem; font-weight: 600; color: var(--green); }
+.live-b .d { width: 5px; height: 5px; border-radius: 50%; background: var(--green); }
+.soon-b { font-size: 0.7rem; font-weight: 600; color: var(--brand); }
+
+/* TESTIMONIALS */
+.testi-bg { background: var(--bg-soft); }
+.testi-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; max-width: 1160px; margin: 48px auto 0; }
+.testi-c { background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 1.75rem; }
+.t-stars { color: #F59E0B; font-size: 0.88rem; letter-spacing: 1px; margin-bottom: 1rem; }
+.t-quote { font-size: 0.855rem; color: var(--muted); line-height: 1.76; margin-bottom: 1.25rem; }
+.t-person { display: flex; align-items: center; gap: 10px; }
+.t-av { width: 36px; height: 36px; border-radius: 50%; font-size: 0.75rem; font-weight: 700; color: #fff; display: flex; align-items: center; justify-content: center; }
+.t-name { font-size: 0.875rem; font-weight: 700; color: var(--text); }
+.t-loc { font-size: 0.72rem; color: var(--muted); }
+
+/* CTA */
+.cta-sec { background: var(--bg-dark); padding: 80px 6%; position: relative; overflow: hidden; }
+.cta-sec::before { content: ''; position: absolute; width: 700px; height: 500px; background: radial-gradient(ellipse, rgba(232,80,10,0.16) 0%, transparent 65%); top: -150px; right: -100px; pointer-events: none; }
+.cta-in { max-width: 680px; margin: 0 auto; text-align: center; position: relative; z-index: 1; }
+.cta-in .eyebrow { color: var(--brand2); }
+.cta-in .sec-h { color: #fff; margin-bottom: 12px; }
+.cta-in .sec-p { color: rgba(255,255,255,0.42); margin: 0 auto 2.5rem; }
+.cta-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.b-orange { display: flex; align-items: center; gap: 7px; padding: 13px 26px; border-radius: 10px; background: var(--brand); color: #fff; font-size: 0.88rem; font-weight: 700; text-decoration: none; transition: all 0.2s; }
+.b-orange:hover { background: var(--brand2); box-shadow: 0 10px 30px rgba(232,80,10,0.38); transform: translateY(-2px); }
+.b-wa { display: flex; align-items: center; gap: 7px; padding: 13px 26px; border-radius: 10px; background: #25D366; color: #fff; font-size: 0.88rem; font-weight: 700; text-decoration: none; transition: all 0.2s; }
+.b-wa:hover { background: #1eb857; transform: translateY(-2px); }
+.b-ghost { display: flex; align-items: center; gap: 7px; padding: 13px 26px; border-radius: 10px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14); color: rgba(255,255,255,0.78); font-size: 0.88rem; font-weight: 600; text-decoration: none; transition: all 0.2s; }
+.b-ghost:hover { background: rgba(255,255,255,0.1); }
+.trust-row { display: flex; gap: 1.75rem; justify-content: center; flex-wrap: wrap; margin-top: 2.5rem; }
+.trust-item { font-size: 0.78rem; color: rgba(255,255,255,0.32); font-weight: 500; }
+
+/* FOOTER */
+footer { background: #050505; border-top: 1px solid #161616; padding: 48px 6% 28px; }
+.foot-grid { display: grid; grid-template-columns: 2.5fr 1fr 1fr 1fr; gap: 3rem; padding-bottom: 36px; border-bottom: 1px solid #161616; margin-bottom: 22px; }
+.foot-brand p { font-size: 0.8rem; color: #4B5563; line-height: 1.72; max-width: 270px; margin-top: 10px; }
+.foot-col h5 { font-size: 0.72rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #374151; margin-bottom: 14px; }
+.foot-col ul { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+.foot-col a { font-size: 0.82rem; color: #6B7280; text-decoration: none; transition: color 0.2s; }
+.foot-col a:hover { color: #fff; }
+.foot-btm { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+.foot-btm p { font-size: 0.76rem; color: #374151; }
+.foot-links { display: flex; gap: 18px; }
+.foot-links a { font-size: 0.76rem; color: #4B5563; text-decoration: none; }
+.foot-links a:hover { color: #fff; }
+
+/* REVEAL */
+.reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.65s ease, transform 0.65s ease; }
+.reveal.in { opacity: 1; transform: none; }
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: #f1f1f1; }
+::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
+
+@media (max-width: 900px) {
+  .ott-wrap { grid-template-columns: 1fr; gap: 48px; }
+  .cov-wrap { grid-template-columns: 1fr; gap: 40px; }
+  .why-grid { grid-template-columns: 1fr 1fr; }
+  .plans-row { grid-template-columns: 1fr; max-width: 400px; }
+  .testi-grid { grid-template-columns: 1fr; }
+  .foot-grid { grid-template-columns: 1fr 1fr; }
+  .nav-links { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <a href="#" class="logo">
+    <div class="logo-icon">☀</div>
+    <span class="logo-text">Sun<span>Broadband</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#plans">Plans</a></li>
+    <li><a href="#ott">OTT Apps</a></li>
+    <li><a href="#coverage">Coverage</a></li>
+    <li><a href="#contact">Support</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="tel:+911234567890" class="nav-call">📞 Call Us</a>
+    <a href="#plans" class="btn-nav">Get Connected</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-body">
+    <div class="hero-eyebrow"><span class="live-dot"></span>Now Live across Raipur, Chhattisgarh</div>
+    <h1>Your favorite <em>OTT apps</em>,<br>at blazing fiber speed.</h1>
+    <p class="hero-sub">Sun Broadband bundles 24+ streaming platforms with ultra-fast fiber internet. One connection. Zero compromise.</p>
+    <div class="hero-btns">
+      <a href="#plans" class="btn-hp">View All Plans →</a>
+      <a href="#ott" class="btn-hg">Explore OTT Bundle</a>
+    </div>
+
+    <div class="ott-showcase">
+      <div class="ott-label-row">
+        <div class="line"></div>
+        <span>Included with every plan</span>
+        <div class="line"></div>
+      </div>
+      <div class="ott-pills">
+        <div class="ott-pill">
+          <div class="pill-icon" style="background:rgba(0,100,200,0.15)">🎬</div>
+          <div><div class="pill-name">Disney+ Hotstar</div><div class="pill-sub">Sports · Movies · Series</div></div>
+        </div>
+        <div class="ott-pill">
+          <div class="pill-icon" style="background:rgba(0,100,220,0.15)">🎭</div>
+          <div><div class="pill-name">SonyLIV</div><div class="pill-sub">Drama · Originals · Sports</div></div>
+        </div>
+        <div class="ott-pill">
+          <div class="pill-icon" style="background:rgba(17,153,187,0.15)">📺</div>
+          <div><div class="pill-name">Zee5</div><div class="pill-sub">Bollywood · Regional</div></div>
+        </div>
+        <div class="ott-pill">
+          <div class="pill-icon" style="background:rgba(0,160,100,0.15)">🛒</div>
+          <div><div class="pill-name">Prime Video</div><div class="pill-sub">Originals · Blockbusters</div></div>
+          <span class="pill-tag">Max</span>
+        </div>
+        <div class="ott-pill">
+          <div class="pill-icon" style="background:rgba(200,30,40,0.15)">🦁</div>
+          <div><div class="pill-name">Lionsgate Play</div><div class="pill-sub">Hollywood · International</div></div>
+          <span class="pill-tag">Max</span>
+        </div>
+        <div class="ott-more-pill">+18 more apps</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="stat-bar">
+    <div class="stat-item"><div class="stat-num">1<sub>Gbps</sub></div><div class="stat-label">Maximum Speed</div></div>
+    <div class="stat-item"><div class="stat-num">24<sub>+</sub></div><div class="stat-label">OTT Platforms</div></div>
+    <div class="stat-item"><div class="stat-num">500<sub>+</sub></div><div class="stat-label">Live Channels</div></div>
+    <div class="stat-item"><div class="stat-num">99.9<sub>%</sub></div><div class="stat-label">Uptime SLA</div></div>
+    <div class="stat-item"><div class="stat-num">24<sub>/7</sub></div><div class="stat-label">Local Support</div></div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-track">
+    <span class="tick-item">Unlimited Data</span><span class="tick-item">Free WiFi Router</span><span class="tick-item">24×7 Local Support</span><span class="tick-item">99.9% Uptime</span><span class="tick-item">No Hidden Charges</span><span class="tick-item">Same Day Installation</span><span class="tick-item">24+ OTT Apps Included</span><span class="tick-item">500+ Live Channels</span><span class="tick-item">Fiber-Optic Network</span><span class="tick-item">Free Router Included</span><span class="tick-item">Unlimited Data</span><span class="tick-item">Free WiFi Router</span><span class="tick-item">24×7 Local Support</span><span class="tick-item">99.9% Uptime</span><span class="tick-item">No Hidden Charges</span><span class="tick-item">Same Day Installation</span><span class="tick-item">24+ OTT Apps Included</span><span class="tick-item">500+ Live Channels</span><span class="tick-item">Fiber-Optic Network</span>
+  </div>
+</div>
+
+<!-- WHY -->
+<section class="sec" id="features">
+  <div class="sec-inner">
+    <div class="reveal">
+      <span class="eyebrow">Why Sun Broadband</span>
+      <h2 class="sec-h">Raipur's most complete<br>fiber experience.</h2>
+    </div>
+    <div class="why-grid reveal">
+      <div class="why-cell"><div class="why-ic">⚡</div><div class="why-title">Fiber-Optic Speed</div><p class="why-desc">Up to 1 Gbps pure fiber — stream 4K, video call, and game simultaneously without any slowdown.</p></div>
+      <div class="why-cell"><div class="why-ic">🎬</div><div class="why-title">24+ OTT Apps Bundled</div><p class="why-desc">Hotstar, SonyLIV, Zee5, Prime, Lionsgate and more — already in your plan. One bill replaces many subscriptions.</p></div>
+      <div class="why-cell"><div class="why-ic">📡</div><div class="why-title">500+ Live Channels</div><p class="why-desc">HD and 4K IPTV with news, sports, entertainment, and regional channels across all genres.</p></div>
+      <div class="why-cell"><div class="why-ic">🛡️</div><div class="why-title">99.9% Uptime SLA</div><p class="why-desc">Enterprise-grade redundant fiber infrastructure. Stable connection even during peak hours.</p></div>
+      <div class="why-cell"><div class="why-ic">🧑‍💻</div><div class="why-title">24×7 Raipur Support</div><p class="why-desc">Real engineers in Raipur — not bots. Instant callbacks and rapid on-site response guaranteed.</p></div>
+      <div class="why-cell"><div class="why-ic">💰</div><div class="why-title">Zero Hidden Charges</div><p class="why-desc">Free router. No surprise fees. Transparent billing from day one — what you see is what you pay.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PLANS -->
+<section class="sec plans-sec" id="plans">
+  <div class="sec-inner">
+    <div class="reveal sec-center">
+      <span class="eyebrow">Plans & Pricing</span>
+      <h2 class="sec-h">Simple, honest pricing.</h2>
+      <p class="sec-p" style="margin:0 auto 40px;">All plans include unlimited data, free router, and OTT bundles — no contracts, no surprises.</p>
+    </div>
+    <div class="plans-row reveal">
+      <div class="plan-card">
+        <div class="plan-tier">Lite</div>
+        <div class="plan-name">Starter</div>
+        <div class="plan-speed">Up to <strong>40 Mbps</strong> fiber speed</div>
+        <div class="price-row"><span class="p-sym">₹</span><span class="p-amt">399</span><span class="p-per">/mo</span></div>
+        <div class="p-gst">+18% GST · Billed annually</div>
+        <div class="p-div"></div>
+        <ul class="p-feats">
+          <li><span class="ck">✓</span> Unlimited data, no FUP</li>
+          <li><span class="ck">✓</span> Free WiFi Router</li>
+          <li><span class="ck">✓</span> <strong>20 OTT apps</strong> included<div class="mini-chips"><span class="mc">Hotstar</span><span class="mc">SonyLIV</span><span class="mc">+18 more</span></div></li>
+          <li><span class="ck">✓</span> <strong>483 live channels</strong> via IPTV</li>
+          <li><span class="ck">✓</span> 24×7 customer support</li>
+        </ul>
+        <a href="#contact" class="p-btn out">Get Started</a>
+      </div>
+
+      <div class="plan-card pop">
+        <div class="pop-label">Most Popular</div>
+        <div class="plan-tier f">Prime</div>
+        <div class="plan-name">Standard</div>
+        <div class="plan-speed">Up to <strong>100 Mbps</strong> fiber speed</div>
+        <div class="price-row"><span class="p-sym">₹</span><span class="p-amt">599</span><span class="p-per">/mo</span></div>
+        <div class="p-gst">+18% GST · Billed annually</div>
+        <div class="p-div"></div>
+        <ul class="p-feats">
+          <li><span class="ck">✓</span> Unlimited data, no FUP</li>
+          <li><span class="ck">✓</span> Free WiFi Router</li>
+          <li><span class="ck">✓</span> <strong>21 OTT apps</strong> incl. Zee5<div class="mini-chips"><span class="mc">Hotstar</span><span class="mc">SonyLIV</span><span class="mc">Zee5</span><span class="mc">+18</span></div></li>
+          <li><span class="ck">✓</span> <strong>491 live channels</strong> via IPTV</li>
+          <li><span class="ck">✓</span> Priority 24×7 support</li>
+          <li><span class="ck">✓</span> Static IP available</li>
+        </ul>
+        <a href="#contact" class="p-btn pri">Get Started</a>
+      </div>
+
+      <div class="plan-card">
+        <div class="plan-tier">Max</div>
+        <div class="plan-name">Ultra</div>
+        <div class="plan-speed">Up to <strong>300 Mbps</strong> fiber speed</div>
+        <div class="price-row"><span class="p-sym">₹</span><span class="p-amt">999</span><span class="p-per">/mo</span></div>
+        <div class="p-gst">+18% GST · Billed annually</div>
+        <div class="p-div"></div>
+        <ul class="p-feats">
+          <li><span class="ck">✓</span> Unlimited data, no FUP</li>
+          <li><span class="ck">✓</span> Free WiFi Router</li>
+          <li><span class="ck">✓</span> <strong>24 OTT apps</strong> — all platforms<div class="mini-chips"><span class="mc">Hotstar</span><span class="mc">SonyLIV</span><span class="mc">Zee5</span><span class="mc">Prime</span><span class="mc">Lionsgate</span><span class="mc">Stage</span></div></li>
+          <li><span class="ck">✓</span> <strong>506 live channels</strong> via IPTV</li>
+          <li><span class="ck">✓</span> Priority 24×7 support</li>
+          <li><span class="ck">✓</span> Static IP + CCTV ready</li>
+        </ul>
+        <a href="#contact" class="p-btn out">Get Started</a>
+      </div>
+    </div>
+    <p class="plans-note reveal">All plans include free installation · Prices are indicative — contact for exact quote · GST extra</p>
+  </div>
+</section>
+
+<!-- OTT DETAIL -->
+<section class="sec ott-dark" id="ott">
+  <div class="ott-wrap">
+    <div class="ott-left reveal">
+      <span class="eyebrow">Entertainment Bundle</span>
+      <h2 class="sec-h">Every streaming app.<br>One subscription.</h2>
+      <p class="sec-p">We've bundled India's top OTT platforms with your fiber plan so you never pay separate subscription fees again.</p>
+      <div class="ott-counts">
+        <div><div class="oc-num">24+</div><div class="oc-label">OTT platforms</div></div>
+        <div><div class="oc-num">500+</div><div class="oc-label">Live channels</div></div>
+        <div><div class="oc-num">4K</div><div class="oc-label">Quality</div></div>
+      </div>
+      <div class="ott-list">
+        <div class="ott-row"><div class="ott-row-left"><div class="ott-sm-icon">🎬</div><div><div class="ott-row-name">Disney+ Hotstar</div><div class="ott-row-type">Live sports, movies, originals</div></div></div><span class="ott-chip">All Plans</span></div>
+        <div class="ott-row"><div class="ott-row-left"><div class="ott-sm-icon">🎭</div><div><div class="ott-row-name">SonyLIV</div><div class="ott-row-type">Drama, sports, originals</div></div></div><span class="ott-chip">All Plans</span></div>
+        <div class="ott-row"><div class="ott-row-left"><div class="ott-sm-icon">📺</div><div><div class="ott-row-name">Zee5</div><div class="ott-row-type">Bollywood, regional, exclusives</div></div></div><span class="ott-chip">Prime + Max</span></div>
+        <div class="ott-row"><div class="ott-row-left"><div class="ott-sm-icon">🛒</div><div><div class="ott-row-name">Amazon Prime Video</div><div class="ott-row-type">Blockbusters, originals</div></div></div><span class="ott-chip">Max Only</span></div>
+        <div class="ott-row"><div class="ott-row-left"><div class="ott-sm-icon">🦁</div><div><div class="ott-row-name">Lionsgate Play</div><div class="ott-row-type">Hollywood, international</div></div></div><span class="ott-chip">Max Only</span></div>
+        <div class="ott-row"><div class="ott-row-left"><div class="ott-sm-icon">🌾</div><div><div class="ott-row-name">Stage</div><div class="ott-row-type">Rajasthani & regional</div></div></div><span class="ott-chip">Max Only</span></div>
+      </div>
+      <div style="margin-top:2rem;"><a href="#plans" style="display:inline-block;padding:12px 24px;border-radius:10px;background:var(--brand);color:#fff;text-decoration:none;font-size:0.88rem;font-weight:700;">Pick Your Plan →</a></div>
+    </div>
+    <div class="ott-cards reveal" style="transition-delay:0.15s;">
+      <div class="ott-c wide"><div class="ott-c-icon">🎬</div><div class="ott-c-name">Disney+ Hotstar</div><div class="ott-c-type">IPL · Live Cricket · Web Series · Movies</div><div class="ott-c-plan">Included in all plans</div></div>
+      <div class="ott-c"><div class="ott-c-icon">🎭</div><div class="ott-c-name">SonyLIV</div><div class="ott-c-type">Sports · Drama · Originals</div><div class="ott-c-plan">All plans</div></div>
+      <div class="ott-c"><div class="ott-c-icon">📺</div><div class="ott-c-name">Zee5</div><div class="ott-c-type">Bollywood · Regional</div><div class="ott-c-plan">Prime & Max</div></div>
+      <div class="ott-c"><div class="ott-c-icon">🛒</div><div class="ott-c-name">Prime Video</div><div class="ott-c-type">Hollywood · Originals</div><div class="ott-c-plan">Max only</div></div>
+      <div class="ott-c"><div class="ott-c-icon">🦁</div><div class="ott-c-name">Lionsgate</div><div class="ott-c-type">International · Films</div><div class="ott-c-plan">Max only</div></div>
+      <div class="ott-c" style="display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px;"><div style="font-size:1.5rem;font-weight:800;color:#fff;">+18</div><div style="font-size:0.75rem;color:rgba(255,255,255,0.33);">more apps</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- COVERAGE -->
+<section class="sec" id="coverage">
+  <div class="cov-wrap">
+    <div class="reveal">
+      <span class="eyebrow">Service Areas</span>
+      <h2 class="sec-h">Are we in<br>your area?</h2>
+      <p class="sec-p">Expanding rapidly across Raipur. New residential and commercial zones added every month.</p>
+      <div style="margin-top:1.5rem;"><a href="#contact" style="display:inline-flex;align-items:center;gap:5px;font-size:0.875rem;font-weight:600;color:var(--brand);text-decoration:none;">Request your area →</a></div>
+    </div>
+    <div class="area-list reveal" style="transition-delay:0.1s;">
+      <div class="area-row"><div class="area-l"><span style="font-size:1.1rem;">📍</span><div><div class="area-name">Powai</div><div class="area-type">Residential</div></div></div><div class="live-b"><span class="d"></span>Live</div></div>
+      <div class="area-row"><div class="area-l"><span style="font-size:1.1rem;">🏙️</span><div><div class="area-name">Hiranandani Gardens</div><div class="area-type">Residential</div></div></div><div class="live-b"><span class="d"></span>Live</div></div>
+      <div class="area-row"><div class="area-l"><span style="font-size:1.1rem;">📍</span><div><div class="area-name">Chandivali</div><div class="area-type">Residential</div></div></div><div class="live-b"><span class="d"></span>Live</div></div>
+      <div class="area-row"><div class="area-l"><span style="font-size:1.1rem;">🏢</span><div><div class="area-name">Nahar Amrit Shakti</div><div class="area-type">Residential Complex</div></div></div><div class="live-b"><span class="d"></span>Live</div></div>
+      <div class="area-row"><div class="area-l"><span style="font-size:1.1rem;">🌇</span><div><div class="area-name">Raheja Vihar</div><div class="area-type">Residential</div></div></div><div class="live-b"><span class="d"></span>Live</div></div>
+      <div class="area-row"><div class="area-l"><span style="font-size:1.1rem;">📡</span><div><div class="area-name">Ghatkopar East</div><div class="area-type">Residential & Commercial</div></div></div><div class="live-b"><span class="d"></span>Live</div></div>
+      <div class="area-row"><div class="area-l"><span style="font-size:1.1rem;">🌆</span><div><div class="area-name">Vikhroli West</div><div class="area-type">Residential</div></div></div><div class="live-b"><span class="d"></span>Live</div></div>
+      <div class="area-row" style="border-color:#fde8d8;"><div class="area-l"><span style="font-size:1.1rem;">🚀</span><div><div class="area-name">New Areas</div><div class="area-type">Expanding monthly</div></div></div><div class="soon-b">Coming Soon</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="sec testi-bg">
+  <div class="sec-inner">
+    <div class="reveal sec-center">
+      <span class="eyebrow">Customer Stories</span>
+      <h2 class="sec-h">Raipur's happiest<br>subscribers.</h2>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-c reveal"><div class="t-stars">★★★★★</div><p class="t-quote">"Installation took less than 2 hours and the speed is exactly as promised. I work from home on video calls all day and stream 4K in the evening. Zero issues in 6 months."</p><div class="t-person"><div class="t-av" style="background:#E8500A;">RK</div><div><div class="t-name">Rahul Kumar</div><div class="t-loc">WFH Professional · Powai</div></div></div></div>
+      <div class="testi-c reveal" style="transition-delay:0.1s;"><div class="t-stars">★★★★★</div><p class="t-quote">"The OTT bundle is genuinely great value. We cancelled our separate Hotstar, Zee5, and SonyLIV — it's all inside the plan. The savings alone cover the broadband cost."</p><div class="t-person"><div class="t-av" style="background:#2563EB;">PS</div><div><div class="t-name">Priya Sharma</div><div class="t-loc">Homemaker · Hiranandani Gardens</div></div></div></div>
+      <div class="testi-c reveal" style="transition-delay:0.2s;"><div class="t-stars">★★★★★</div><p class="t-quote">"Running a design studio on the Max plan. 8 months, zero downtime. Video meetings, large file uploads, and cloud backup all running simultaneously. Highly recommend."</p><div class="t-person"><div class="t-av" style="background:#16A34A;">AM</div><div><div class="t-name">Amit Mehta</div><div class="t-loc">Business Owner · Ghatkopar East</div></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-sec" id="contact">
+  <div class="cta-in reveal">
+    <span class="eyebrow">Get Connected</span>
+    <h2 class="sec-h">Ready to switch?<br>We'll call in 10 minutes.</h2>
+    <p class="sec-p">No commitment. No paperwork. Just tell us your address and we handle the rest.</p>
+    <div class="cta-btns">
+      <a href="tel:+911234567890" class="b-orange">📞 Call Now</a>
+      <a href="https://wa.me/911234567890" class="b-wa">💬 WhatsApp Us</a>
+      <a href="#plans" class="b-ghost">View Plans</a>
+    </div>
+    <div class="trust-row">
+      <span class="trust-item">✓ Free Installation</span>
+      <span class="trust-item">✓ Free Router Included</span>
+      <span class="trust-item">✓ No Lock-in Contract</span>
+      <span class="trust-item">✓ Same Day Setup</span>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-grid">
+    <div class="foot-brand">
+      <div class="logo" style="color:#fff;"><div class="logo-icon">☀</div><span>Sun<span style="color:var(--brand);">Broadband</span></span></div>
+      <p>High-speed fiber internet with 24+ OTT apps across Raipur, Chhattisgarh. Reliable, affordable, and backed by real local support.</p>
+    </div>
+    <div class="foot-col"><h5>Plans</h5><ul><li><a href="#plans">Lite / Starter</a></li><li><a href="#plans">Prime / Standard</a></li><li><a href="#plans">Max / Ultra</a></li><li><a href="#ott">OTT Bundle</a></li></ul></div>
+    <div class="foot-col"><h5>Company</h5><ul><li><a href="#">About Us</a></li><li><a href="#coverage">Coverage</a></li><li><a href="#">Careers</a></li><li><a href="#">Press</a></li></ul></div>
+    <div class="foot-col"><h5>Support</h5><ul><li><a href="#">Help Center</a></li><li><a href="#">Pay Bill</a></li><li><a href="#">Raise Ticket</a></li><li><a href="#">Privacy Policy</a></li></ul></div>
+  </div>
+  <div class="foot-btm">
+    <p>© 2025 Sun Broadband. All rights reserved. Raipur, Chhattisgarh.</p>
+    <div class="foot-links"><a href="#">Terms</a><a href="#">Privacy</a><a href="#">Refund Policy</a></div>
+  </div>
+</footer>
+
+<script>
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 20));
+  const els = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  els.forEach(el => io.observe(el));
+</script>
+</body>
+</html>
