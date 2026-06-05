@@ -285,22 +285,9 @@ function OttModal({ planId, onClose }) {
 
 // ─── Shared Header ────────────────────────────────────────────────────────────
 
-function PlanHeader({ activeTab, setActiveTab, gstOn, setGstOn, showBack, onBack }) {
+function PlanHeader({ activeTab, setActiveTab, gstOn, setGstOn, showBack }) {
   return (
     <div>
-      {showBack && (
-        <button
-          onClick={onBack}
-          style={{
-            background: "transparent", border: "none",
-            color: "#f97316", fontSize: 14, fontWeight: 600,
-            cursor: "pointer", display: "flex", alignItems: "center",
-            gap: 6, marginBottom: "1.25rem", padding: 0,
-          }}
-        >
-          ← Back to Plans
-        </button>
-      )}
 
       <h1 style={{
         textAlign: "center", fontSize: "clamp(1.5rem,4vw,2.2rem)", fontWeight: 800,
@@ -391,179 +378,6 @@ function PlanHeader({ activeTab, setActiveTab, gstOn, setGstOn, showBack, onBack
         >
           Including 18% GST
         </span>
-      </div>
-    </div>
-  );
-}
-
-// ─── Main Page ────────────────────────────────────────────────────────────────
-
-function MainPage({ activeTab, gstOn, onViewAll }) {
-  const FEATURES = {
-    lite: [
-      { text: "Unlimited data, no FUP" },
-      { text: "Free WiFi Router" },
-      { text: "20 OTT apps included", chips: ["JioHotstar", "SonyLiv", "+18 more ↓"] },
-      { text: "483 live channels via IPTV" },
-      { text: "24×7 customer support" },
-    ],
-    prime: [
-      { text: "Unlimited data, no FUP" },
-      { text: "Free WiFi Router" },
-      { text: "21 OTT apps incl. Zee5", chips: ["JioHotstar", "SonyLiv", "Zee5", "+18 more ↓"] },
-      { text: "491 live channels via IPTV" },
-      { text: "Priority 24×7 support" },
-      { text: "Static IP available" },
-    ],
-    max: [
-      { text: "Unlimited data, no FUP" },
-      { text: "Free WiFi Router" },
-      { text: "24 OTT apps — all platforms", chips: ["JioHotstar", "SonyLiv", "Zee5", "Prime Video", "+20 more ↓"] },
-      { text: "506 live channels via IPTV" },
-      { text: "Priority 24×7 support" },
-      { text: "Static IP + CCTV ready" },
-    ],
-  };
-
-  return (
-    <div>
-      <div style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-        gap: "1.5rem",
-        marginBottom: "1.5rem",
-      }}>
-        {PLANS.map((plan) => {
-          const heroEff = fmtINR(applyGst(HERO_PRICES[activeTab][plan.id], gstOn));
-          return (
-            <div
-              key={plan.id}
-              style={{
-                background: "#fff",
-                border: plan.featured ? "2px solid #f97316" : "0.5px solid #e0e0e0",
-                borderRadius: 16,
-                padding: "1.5rem",
-                position: "relative",
-                display: "flex",
-                flexDirection: "column",
-              }}
-            >
-              {plan.featured && (
-                <div style={{
-                  position: "absolute", top: -15, left: "50%",
-                  transform: "translateX(-50%)",
-                  background: "#f97316", color: "#fff",
-                  fontSize: 10, fontWeight: 700,
-                  padding: "4px 18px", borderRadius: 12,
-                  whiteSpace: "nowrap", letterSpacing: "0.06em",
-                }}>
-                  MOST POPULAR
-                </div>
-              )}
-
-              <div style={{
-                fontSize: 10, fontWeight: 700, letterSpacing: "0.1em",
-                display: "inline-block",
-                background: "#fff7ed", color: "#c2640a",
-                padding: "3px 10px", borderRadius: 6, marginBottom: 6,
-                alignSelf: "flex-start",
-              }}>
-                {plan.id.toUpperCase()}
-              </div>
-
-              <div style={{ fontSize: "1.2rem", fontWeight: 700, color: "#111", marginBottom: 2 }}>
-                {plan.name}
-              </div>
-              <div style={{ fontSize: 12, color: "#888", marginBottom: "1.2rem" }}>{plan.meta}</div>
-
-              {/* <div style={{ display: "flex", alignItems: "baseline", gap: 3, marginBottom: 3 }}>
-                <span style={{ fontSize: "1rem", fontWeight: 700, color: "#111" }}>₹</span>
-                <span style={{ fontSize: "1.1rem", fontWeight: 600, color: "#666" }}>Starts from</span>
-                <span style={{ fontSize: "2.2rem", fontWeight: 800, color: "#111", lineHeight: 1 }}>
-                  {heroEff.replace("₹", "")}
-                </span>
-                <span style={{ fontSize: 13, color: "#888" }}>/mo</span>
-              </div> */}
-              {/* <div style={{ fontSize: 11, color: "#aaa", marginBottom: "1.4rem" }}>
-                {gstOn ? "incl." : "+"}18% GST · Billed {activeTab.toLowerCase()}
-              </div> */}
-
-              <ul style={{ listStyle: "none", padding: 0, display: "flex", flexDirection: "column", gap: 9, marginBottom: "1.5rem", flex: 1 }}>
-                {FEATURES[plan.id].map((f, i) => (
-                  <li key={i} style={{ display: "flex", alignItems: "flex-start", gap: 8, fontSize: 13, color: "#222" }}>
-                    <span style={{ color: "#22c55e", fontSize: 15, marginTop: 1, flexShrink: 0 }}>✓</span>
-                    <div>
-                      {f.text}
-                      {f.chips && (
-                        <div style={{ display: "flex", flexWrap: "wrap", gap: 4, marginTop: 4 }}>
-                          {f.chips.map((c) => (
-                            <span key={c} style={{
-                              background: c.startsWith("+") ? "#fff7ed" : "#f5f5f5",
-                              border: c.startsWith("+") ? "0.5px solid #f97316" : "0.5px solid #e0e0e0",
-                              borderRadius: 6, padding: "2px 8px",
-                              fontSize: 11,
-                              color: c.startsWith("+") ? "#f97316" : "#666",
-                            }}>
-                              {c}
-                            </span>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  </li>
-                ))}
-              </ul>
-
-              {/* <button style={{
-                width: "100%", padding: 11, borderRadius: 10,
-                fontSize: 14, fontWeight: 600, cursor: "pointer",
-                border: "2px solid #f97316",
-                background: plan.featured ? "#f97316" : "transparent",
-                color: plan.featured ? "#fff" : "#f97316",
-              }}>
-                Get Connected
-              </button> */}
-              <a
-                href="#contact"
-                style={{
-                  display: "block",
-                  width: "100%",
-                  padding: 11,
-                  borderRadius: 10,
-                  fontSize: 14,
-                  fontWeight: 600,
-                  cursor: "pointer",
-                  border: "2px solid #f97316",
-                  background: plan.featured ? "#f97316" : "transparent",
-                  color: plan.featured ? "#fff" : "#f97316",
-                  textAlign: "center",
-                  textDecoration: "none",
-                  boxSizing: "border-box",
-                }}
-              >
-                Get Connected
-              </a>
-            </div>
-          );
-        })}
-      </div>
-
-      <p style={{ textAlign: "center", fontSize: 12, color: "#999", marginBottom: "2rem" }}>
-        Prices shown for Internet + OTT bundle at 100 Mbps. More speeds & plan types available.
-      </p>
-
-      <div style={{ textAlign: "center" }}>
-        <button
-          onClick={onViewAll}
-          style={{
-            background: "#f97316", color: "#fff",
-            border: "none", padding: "13px 48px",
-            borderRadius: 10, fontSize: 15, fontWeight: 700,
-            cursor: "pointer",
-          }}
-        >
-          View All Plans & Speeds →
-        </button>
       </div>
     </div>
   );
@@ -760,7 +574,7 @@ function AllPlansPage({ activeTab, gstOn }) {
 // ─── Root ─────────────────────────────────────────────────────────────────────
 
 export default function SunFiberPlans() {
-  const [page, setPage] = useState("main");
+  // const [page, setPage] = useState("main");
   const [activeTab, setActiveTab] = useState("Yearly");
   const [gstOn, setGstOn] = useState(false);
 
@@ -777,22 +591,12 @@ export default function SunFiberPlans() {
         setActiveTab={setActiveTab}
         gstOn={gstOn}
         setGstOn={setGstOn}
-        showBack={page === "all"}
-        onBack={() => setPage("main")}
       />
 
-      {page === "main" ? (
-        <MainPage
-          activeTab={activeTab}
-          gstOn={gstOn}
-          onViewAll={() => setPage("all")}
-        />
-      ) : (
-        <AllPlansPage
-          activeTab={activeTab}
-          gstOn={gstOn}
-        />
-      )}
+      <AllPlansPage
+        activeTab={activeTab}
+        gstOn={gstOn}
+      />
     </section>
   );
 }

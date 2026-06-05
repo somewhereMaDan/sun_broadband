@@ -491,7 +491,7 @@ export default function App() {
           <p className="sec-p">No commitment. No paperwork. Just tell us your address and we handle the rest.</p>
           <div className="cta-btns">
             <a href="tel:07714744444" className="b-orange">📞 Call Now</a>
-            <a href="https://wa.me/917714744444" className="b-wa">💬 WhatsApp Us</a>
+            <a href="https://wa.me/07714744444" className="b-wa">💬 WhatsApp Us</a>
             <a href="#plans" className="b-ghost">View Plans</a>
           </div>
           <div className="trust-row">
