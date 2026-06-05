@@ -4,23 +4,6 @@ import { useState } from "react";
 
 const TABS = ["Monthly", "Quarterly", "Half-Yearly", "Yearly"];
 
-// Base prices (excl GST) per billing cycle, for Internet+OTT at 100 Mbps (hero price)
-// You can replace these with your actual figures
-const HERO_PRICES = {
-  Monthly: { lite: 799, prime: 849, max: 1099 },
-  Quarterly: { lite: 720, prime: 769, max: 989 },
-  "Half-Yearly": { lite: 690, prime: 739, max: 949 },
-  Yearly: { lite: 650, prime: 700, max: 900 },
-};
-
-// Multipliers relative to Monthly base price (for sub-plan speed rows)
-const CYCLE_MULT = {
-  Monthly: 1,
-  Quarterly: 0.92,
-  "Half-Yearly": 0.88,
-  Yearly: 0.81,
-};
-
 const OTT_APPS = {
   lite: [
     "JioHotstar", "SonyLiv", "ZEE5", "Sun NXT", "Discovery+", "Lionsgate Play",
@@ -42,7 +25,9 @@ const OTT_APPS = {
   ],
 };
 
-// Speed rows for each sub-plan — raw monthly prices (CYCLE_MULT applied at render time)
+// Each speed row: { speed, Monthly, Quarterly, "Half-Yearly", Yearly }
+// Each cycle value: { total (billed that cycle), eff (effective per month) }
+
 const PLANS = [
   {
     id: "lite",
@@ -54,37 +39,39 @@ const PLANS = [
     subPlans: [
       {
         label: "Internet Only",
+        hasOtt: false,
         speeds: [
-          { speed: "50 Mbps", base: 499 },
-          { speed: "100 Mbps", base: 599 },
-          { speed: "200 Mbps", base: 899 },
+          { speed: "50 Mbps", Monthly: { total: 499, eff: 499 }, Quarterly: { total: 1497, eff: 499 }, "Half-Yearly": { total: 2749, eff: 458 }, Yearly: { total: 4999, eff: 417 } },
+          { speed: "100 Mbps", Monthly: { total: 599, eff: 599 }, Quarterly: { total: 1797, eff: 599 }, "Half-Yearly": { total: 3299, eff: 550 }, Yearly: { total: 5999, eff: 500 } },
+          { speed: "200 Mbps", Monthly: { total: 899, eff: 899 }, Quarterly: { total: 2697, eff: 899 }, "Half-Yearly": { total: 4999, eff: 833 }, Yearly: { total: 8999, eff: 750 } },
         ],
       },
       {
         label: "Internet + OTT 20 Apps",
         hasOtt: true,
         speeds: [
-          { speed: "100 Mbps", base: 800 },
-          { speed: "150 Mbps", base: 900 },
-          { speed: "200 Mbps", base: 1000 },
-          { speed: "300 Mbps", base: 1500 },
+          { speed: "100 Mbps", Monthly: { total: 800, eff: 800 }, Quarterly: { total: 2250, eff: 750 }, "Half-Yearly": { total: 4200, eff: 700 }, Yearly: { total: 7800, eff: 650 } },
+          { speed: "150 Mbps", Monthly: { total: 900, eff: 900 }, Quarterly: { total: 2550, eff: 850 }, "Half-Yearly": { total: 4800, eff: 800 }, Yearly: { total: 9000, eff: 750 } },
+          { speed: "200 Mbps", Monthly: { total: 1000, eff: 1000 }, Quarterly: { total: 2850, eff: 950 }, "Half-Yearly": { total: 5250, eff: 875 }, Yearly: { total: 9600, eff: 800 } },
+          { speed: "300 Mbps", Monthly: { total: 1500, eff: 1500 }, Quarterly: { total: 4350, eff: 1450 }, "Half-Yearly": { total: 8100, eff: 1350 }, Yearly: { total: 15000, eff: 1250 } },
         ],
       },
       {
         label: "Internet + IPTV",
+        hasOtt: false,
         speeds: [
-          { speed: "100 Mbps", base: 1000 },
-          { speed: "200 Mbps", base: 1400 },
-          { speed: "300 Mbps", base: 1800 },
+          { speed: "100 Mbps", Monthly: { total: 1000, eff: 1000 }, Quarterly: { total: 2847, eff: 949 }, "Half-Yearly": { total: 5394, eff: 899 }, Yearly: { total: 10188, eff: 849 } },
+          { speed: "200 Mbps", Monthly: { total: 1400, eff: 1400 }, Quarterly: { total: 3597, eff: 1199 }, "Half-Yearly": { total: 6744, eff: 1124 }, Yearly: { total: 12588, eff: 1049 } },
+          { speed: "300 Mbps", Monthly: { total: 1800, eff: 1800 }, Quarterly: { total: 4497, eff: 1499 }, "Half-Yearly": { total: 8394, eff: 1399 }, Yearly: { total: 15588, eff: 1299 } },
         ],
       },
       {
         label: "Internet + OTT + IPTV 20 Apps",
         hasOtt: true,
         speeds: [
-          { speed: "100 Mbps", base: 1100 },
-          { speed: "200 Mbps", base: 1549 },
-          { speed: "300 Mbps", base: 2099 },
+          { speed: "100 Mbps", Monthly: { total: 1100, eff: 1100 }, Quarterly: { total: 2997, eff: 999 }, "Half-Yearly": { total: 5694, eff: 949 }, Yearly: { total: 10788, eff: 899 } },
+          { speed: "200 Mbps", Monthly: { total: 1549, eff: 1549 }, Quarterly: { total: 3747, eff: 1249 }, "Half-Yearly": { total: 7044, eff: 1174 }, Yearly: { total: 13188, eff: 1099 } },
+          { speed: "300 Mbps", Monthly: { total: 2099, eff: 2099 }, Quarterly: { total: 4677, eff: 1559 }, "Half-Yearly": { total: 8694, eff: 1449 }, Yearly: { total: 16188, eff: 1349 } },
         ],
       },
     ],
@@ -99,37 +86,39 @@ const PLANS = [
     subPlans: [
       {
         label: "Internet Only",
+        hasOtt: false,
         speeds: [
-          { speed: "50 Mbps", base: 499 },
-          { speed: "100 Mbps", base: 599 },
-          { speed: "200 Mbps", base: 899 },
+          { speed: "50 Mbps", Monthly: { total: 499, eff: 499 }, Quarterly: { total: 1497, eff: 499 }, "Half-Yearly": { total: 2749, eff: 458 }, Yearly: { total: 4999, eff: 417 } },
+          { speed: "100 Mbps", Monthly: { total: 599, eff: 599 }, Quarterly: { total: 1797, eff: 599 }, "Half-Yearly": { total: 3299, eff: 550 }, Yearly: { total: 5999, eff: 500 } },
+          { speed: "200 Mbps", Monthly: { total: 899, eff: 899 }, Quarterly: { total: 2697, eff: 899 }, "Half-Yearly": { total: 4999, eff: 833 }, Yearly: { total: 8999, eff: 750 } },
         ],
       },
       {
         label: "Internet + OTT 21 Apps",
         hasOtt: true,
         speeds: [
-          { speed: "100 Mbps", base: 850 },
-          { speed: "150 Mbps", base: 950 },
-          { speed: "200 Mbps", base: 1050 },
-          { speed: "300 Mbps", base: 1600 },
+          { speed: "100 Mbps", Monthly: { total: 850, eff: 850 }, Quarterly: { total: 2400, eff: 800 }, "Half-Yearly": { total: 4500, eff: 750 }, Yearly: { total: 8400, eff: 700 } },
+          { speed: "150 Mbps", Monthly: { total: 950, eff: 950 }, Quarterly: { total: 2700, eff: 900 }, "Half-Yearly": { total: 5100, eff: 850 }, Yearly: { total: 9600, eff: 800 } },
+          { speed: "200 Mbps", Monthly: { total: 1050, eff: 1050 }, Quarterly: { total: 3000, eff: 1000 }, "Half-Yearly": { total: 5550, eff: 925 }, Yearly: { total: 10200, eff: 850 } },
+          { speed: "300 Mbps", Monthly: { total: 1600, eff: 1600 }, Quarterly: { total: 4500, eff: 1500 }, "Half-Yearly": { total: 8400, eff: 1400 }, Yearly: { total: 15600, eff: 1300 } },
         ],
       },
       {
         label: "Internet + IPTV",
+        hasOtt: false,
         speeds: [
-          { speed: "100 Mbps", base: 1149 },
-          { speed: "200 Mbps", base: 1299 },
-          { speed: "300 Mbps", base: 1599 },
+          { speed: "100 Mbps", Monthly: { total: 1149, eff: 1149 }, Quarterly: { total: 3147, eff: 1049 }, "Half-Yearly": { total: 5994, eff: 999 }, Yearly: { total: 11388, eff: 949 } },
+          { speed: "200 Mbps", Monthly: { total: 1299, eff: 1299 }, Quarterly: { total: 3672, eff: 1224 }, "Half-Yearly": { total: 7044, eff: 1174 }, Yearly: { total: 13188, eff: 1099 } },
+          { speed: "300 Mbps", Monthly: { total: 1599, eff: 1599 }, Quarterly: { total: 4947, eff: 1649 }, "Half-Yearly": { total: 9294, eff: 1549 }, Yearly: { total: 17388, eff: 1449 } },
         ],
       },
       {
         label: "Internet + OTT + IPTV 21 Apps",
         hasOtt: true,
         speeds: [
-          { speed: "100 Mbps", base: 1199 },
-          { speed: "200 Mbps", base: 1399 },
-          { speed: "300 Mbps", base: 1849 },
+          { speed: "100 Mbps", Monthly: { total: 1199, eff: 1199 }, Quarterly: { total: 3297, eff: 1099 }, "Half-Yearly": { total: 6294, eff: 1049 }, Yearly: { total: 11988, eff: 999 } },
+          { speed: "200 Mbps", Monthly: { total: 1399, eff: 1399 }, Quarterly: { total: 3897, eff: 1299 }, "Half-Yearly": { total: 7344, eff: 1224 }, Yearly: { total: 13788, eff: 1149 } },
+          { speed: "300 Mbps", Monthly: { total: 1849, eff: 1849 }, Quarterly: { total: 5397, eff: 1799 }, "Half-Yearly": { total: 10194, eff: 1699 }, Yearly: { total: 19188, eff: 1599 } },
         ],
       },
     ],
@@ -144,50 +133,63 @@ const PLANS = [
     subPlans: [
       {
         label: "Internet Only",
+        hasOtt: false,
         speeds: [
-          { speed: "50 Mbps", base: 499 },
-          { speed: "100 Mbps", base: 599 },
-          { speed: "200 Mbps", base: 899 },
+          { speed: "50 Mbps", Monthly: { total: 499, eff: 499 }, Quarterly: { total: 1497, eff: 499 }, "Half-Yearly": { total: 2749, eff: 458 }, Yearly: { total: 4999, eff: 417 } },
+          { speed: "100 Mbps", Monthly: { total: 599, eff: 599 }, Quarterly: { total: 1797, eff: 599 }, "Half-Yearly": { total: 3299, eff: 550 }, Yearly: { total: 5999, eff: 500 } },
+          { speed: "200 Mbps", Monthly: { total: 899, eff: 899 }, Quarterly: { total: 2697, eff: 899 }, "Half-Yearly": { total: 4999, eff: 833 }, Yearly: { total: 8999, eff: 750 } },
         ],
       },
       {
         label: "Internet + OTT 24 Apps",
         hasOtt: true,
         speeds: [
-          { speed: "100 Mbps", base: 1100 },
-          { speed: "150 Mbps", base: 1200 },
-          { speed: "200 Mbps", base: 1300 },
-          { speed: "300 Mbps", base: 1800 },
-          { speed: "500 Mbps", base: 2800 },
-          { speed: "1000 Mbps", base: 4300 },
+          { speed: "100 Mbps", Monthly: { total: 1100, eff: 1100 }, Quarterly: { total: 3000, eff: 1000 }, "Half-Yearly": { total: 5700, eff: 950 }, Yearly: { total: 10800, eff: 900 } },
+          { speed: "150 Mbps", Monthly: { total: 1200, eff: 1200 }, Quarterly: { total: 3300, eff: 1100 }, "Half-Yearly": { total: 6300, eff: 1050 }, Yearly: { total: 12000, eff: 1000 } },
+          { speed: "200 Mbps", Monthly: { total: 1300, eff: 1300 }, Quarterly: { total: 3600, eff: 1200 }, "Half-Yearly": { total: 6750, eff: 1125 }, Yearly: { total: 12600, eff: 1050 } },
+          { speed: "300 Mbps", Monthly: { total: 1800, eff: 1800 }, Quarterly: { total: 5100, eff: 1700 }, "Half-Yearly": { total: 9600, eff: 1600 }, Yearly: { total: 18000, eff: 1500 } },
+          { speed: "500 Mbps", Monthly: { total: 2800, eff: 2800 }, Quarterly: { total: 7950, eff: 2650 }, "Half-Yearly": { total: 15000, eff: 2500 }, Yearly: { total: 28800, eff: 2400 } },
+          { speed: "1000 Mbps", Monthly: { total: 4300, eff: 4300 }, Quarterly: { total: 12450, eff: 4150 }, "Half-Yearly": { total: 23100, eff: 3850 }, Yearly: { total: 42600, eff: 3550 } },
         ],
       },
       {
         label: "Internet + IPTV",
+        hasOtt: false,
         speeds: [
-          { speed: "100 Mbps", base: 1399 },
-          { speed: "200 Mbps", base: 1899 },
-          { speed: "300 Mbps", base: 1999 },
+          { speed: "100 Mbps", Monthly: { total: 1399, eff: 1399 }, Quarterly: { total: 3747, eff: 1249 }, "Half-Yearly": { total: 7194, eff: 1199 }, Yearly: { total: 13788, eff: 1149 } },
+          { speed: "200 Mbps", Monthly: { total: 1899, eff: 1899 }, Quarterly: { total: 4497, eff: 1499 }, "Half-Yearly": { total: 8544, eff: 1424 }, Yearly: { total: 15888, eff: 1324 } },
+          { speed: "300 Mbps", Monthly: { total: 1999, eff: 1999 }, Quarterly: { total: 5697, eff: 1899 }, "Half-Yearly": { total: 10794, eff: 1799 }, Yearly: { total: 20388, eff: 1699 } },
         ],
       },
       {
         label: "Internet + OTT + IPTV 24 Apps",
         hasOtt: true,
         speeds: [
-          { speed: "100 Mbps", base: 1449 },
-          { speed: "200 Mbps", base: 1999 },
-          { speed: "300 Mbps", base: 2199 },
+          { speed: "100 Mbps", Monthly: { total: 1449, eff: 1449 }, Quarterly: { total: 4047, eff: 1349 }, "Half-Yearly": { total: 7794, eff: 1299 }, Yearly: { total: 14988, eff: 1249 } },
+          { speed: "200 Mbps", Monthly: { total: 1999, eff: 1999 }, Quarterly: { total: 4647, eff: 1549 }, "Half-Yearly": { total: 8844, eff: 1474 }, Yearly: { total: 16788, eff: 1399 } },
+          { speed: "300 Mbps", Monthly: { total: 2199, eff: 2199 }, Quarterly: { total: 5997, eff: 1999 }, "Half-Yearly": { total: 11394, eff: 1899 }, Yearly: { total: 21588, eff: 1799 } },
         ],
       },
     ],
   },
 ];
 
-// ─── Helpers ─────────────────────────────────────────────────────────────────
+// Hero card "starts from" prices — Internet+OTT 100 Mbps effective/month per cycle
+const HERO_PRICES = {
+  Monthly: { lite: 800, prime: 850, max: 1100 },
+  Quarterly: { lite: 750, prime: 800, max: 1000 },
+  "Half-Yearly": { lite: 700, prime: 750, max: 950 },
+  Yearly: { lite: 650, prime: 700, max: 900 },
+};
 
-function calcPrice(base, tab, gstOn) {
-  const v = Math.round(base * CYCLE_MULT[tab] * (gstOn ? 1.18 : 1));
-  return "₹" + v.toLocaleString("en-IN");
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+function applyGst(value, gstOn) {
+  return Math.round(value * (gstOn ? 1.18 : 1));
+}
+
+function fmtINR(value) {
+  return "₹" + value.toLocaleString("en-IN");
 }
 
 // ─── Toggle ───────────────────────────────────────────────────────────────────
@@ -281,7 +283,7 @@ function OttModal({ planId, onClose }) {
   );
 }
 
-// ─── Shared header (tabs + GST toggle) ───────────────────────────────────────
+// ─── Shared Header ────────────────────────────────────────────────────────────
 
 function PlanHeader({ activeTab, setActiveTab, gstOn, setGstOn, showBack, onBack }) {
   return (
@@ -309,7 +311,6 @@ function PlanHeader({ activeTab, setActiveTab, gstOn, setGstOn, showBack, onBack
         Sun Fiber Plans
       </h1>
 
-      {/* Feature badges */}
       <div style={{
         display: "flex", justifyContent: "center", gap: "0.75rem",
         flexWrap: "wrap", marginBottom: "1.5rem",
@@ -330,7 +331,6 @@ function PlanHeader({ activeTab, setActiveTab, gstOn, setGstOn, showBack, onBack
         ))}
       </div>
 
-      {/* Billing tabs */}
       <div style={{ display: "flex", justifyContent: "center", marginBottom: "0.75rem", paddingTop: "0.5rem" }}>
         <div style={{
           display: "flex",
@@ -376,7 +376,6 @@ function PlanHeader({ activeTab, setActiveTab, gstOn, setGstOn, showBack, onBack
         </div>
       </div>
 
-      {/* GST note + toggle */}
       <p style={{ textAlign: "center", fontSize: 12, color: "#777", marginBottom: "0.4rem" }}>
         All prices <strong>exclude GST (18%).</strong> Yearly plans include 2 months free!
       </p>
@@ -397,13 +396,9 @@ function PlanHeader({ activeTab, setActiveTab, gstOn, setGstOn, showBack, onBack
   );
 }
 
-// ─── Main Page: 3 summary cards ──────────────────────────────────────────────
+// ─── Main Page ────────────────────────────────────────────────────────────────
 
 function MainPage({ activeTab, gstOn, onViewAll }) {
-  const prices = HERO_PRICES[activeTab];
-  const mult = gstOn ? 1.18 : 1;
-  const fmt = (v) => Math.round(v * mult).toLocaleString("en-IN");
-
   const FEATURES = {
     lite: [
       { text: "Unlimited data, no FUP" },
@@ -423,7 +418,7 @@ function MainPage({ activeTab, gstOn, onViewAll }) {
     max: [
       { text: "Unlimited data, no FUP" },
       { text: "Free WiFi Router" },
-      { text: "24 OTT apps — all platforms", chips: ["JioHotstar", "SonyLiv", "Zee5", "Prime Video", "Lionsgate", "+18 more ↓"] },
+      { text: "24 OTT apps — all platforms", chips: ["JioHotstar", "SonyLiv", "Zee5", "Prime Video", "+20 more ↓"] },
       { text: "506 live channels via IPTV" },
       { text: "Priority 24×7 support" },
       { text: "Static IP + CCTV ready" },
@@ -432,142 +427,131 @@ function MainPage({ activeTab, gstOn, onViewAll }) {
 
   return (
     <div>
-      {/* 3 hero plan cards */}
       <div style={{
         display: "grid",
         gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
         gap: "1.5rem",
         marginBottom: "1.5rem",
       }}>
-        {PLANS.map((plan) => (
-          <div
-            key={plan.id}
-            style={{
-              background: "#fff",
-              border: plan.featured ? "2px solid #f97316" : "0.5px solid #e0e0e0",
-              borderRadius: 16,
-              padding: "1.5rem",
-              position: "relative",
-              display: "flex",
-              flexDirection: "column",
-            }}
-          >
-            {plan.featured && (
-              <div style={{
-                position: "absolute", top: -15, left: "50%",
-                transform: "translateX(-50%)",
-                background: "#f97316", color: "#fff",
-                fontSize: 10, fontWeight: 700,
-                padding: "4px 18px", borderRadius: 12,
-                whiteSpace: "nowrap", letterSpacing: "0.06em",
-              }}>
-                MOST POPULAR
-              </div>
-            )}
-
-            <div style={{
-              fontSize: 10, fontWeight: 700, letterSpacing: "0.1em",
-              display: "inline-block",
-              background: "#fff7ed", color: "#c2640a",
-              padding: "3px 10px", borderRadius: 6, marginBottom: 6,
-              alignSelf: "flex-start",
-            }}>
-              {plan.id.toUpperCase()}
-            </div>
-
-            <div style={{ fontSize: "1.2rem", fontWeight: 700, color: "#111", marginBottom: 2 }}>
-              {plan.name}
-            </div>
-            <div style={{ fontSize: 12, color: "#888", marginBottom: "1.2rem" }}>{plan.meta}</div>
-
-            {/* <div style={{ display: "flex", alignItems: "baseline", gap: 3, marginBottom: 3 }}>
-              <span style={{ fontSize: "1rem", fontWeight: 700, color: "#111" }}>₹</span>
-              <span style={{ fontSize: "2.2rem", fontWeight: 800, color: "#111", lineHeight: 1 }}>
-                {fmt(prices[plan.id])}
-              </span>
-              <span style={{ fontSize: 13, color: "#888" }}>/mo</span>
-            </div> */}
+        {PLANS.map((plan) => {
+          const heroEff = fmtINR(applyGst(HERO_PRICES[activeTab][plan.id], gstOn));
+          return (
             <div
+              key={plan.id}
               style={{
+                background: "#fff",
+                border: plan.featured ? "2px solid #f97316" : "0.5px solid #e0e0e0",
+                borderRadius: 16,
+                padding: "1.5rem",
+                position: "relative",
                 display: "flex",
-                alignItems: "baseline",
-                gap: 3,
-                marginBottom: 3,
+                flexDirection: "column",
               }}
             >
-              <span style={{ fontSize: "1rem", fontWeight: 700, color: "#111" }}>₹</span>
+              {plan.featured && (
+                <div style={{
+                  position: "absolute", top: -15, left: "50%",
+                  transform: "translateX(-50%)",
+                  background: "#f97316", color: "#fff",
+                  fontSize: 10, fontWeight: 700,
+                  padding: "4px 18px", borderRadius: 12,
+                  whiteSpace: "nowrap", letterSpacing: "0.06em",
+                }}>
+                  MOST POPULAR
+                </div>
+              )}
 
-              <span
+              <div style={{
+                fontSize: 10, fontWeight: 700, letterSpacing: "0.1em",
+                display: "inline-block",
+                background: "#fff7ed", color: "#c2640a",
+                padding: "3px 10px", borderRadius: 6, marginBottom: 6,
+                alignSelf: "flex-start",
+              }}>
+                {plan.id.toUpperCase()}
+              </div>
+
+              <div style={{ fontSize: "1.2rem", fontWeight: 700, color: "#111", marginBottom: 2 }}>
+                {plan.name}
+              </div>
+              <div style={{ fontSize: 12, color: "#888", marginBottom: "1.2rem" }}>{plan.meta}</div>
+
+              {/* <div style={{ display: "flex", alignItems: "baseline", gap: 3, marginBottom: 3 }}>
+                <span style={{ fontSize: "1rem", fontWeight: 700, color: "#111" }}>₹</span>
+                <span style={{ fontSize: "1.1rem", fontWeight: 600, color: "#666" }}>Starts from</span>
+                <span style={{ fontSize: "2.2rem", fontWeight: 800, color: "#111", lineHeight: 1 }}>
+                  {heroEff.replace("₹", "")}
+                </span>
+                <span style={{ fontSize: 13, color: "#888" }}>/mo</span>
+              </div> */}
+              {/* <div style={{ fontSize: 11, color: "#aaa", marginBottom: "1.4rem" }}>
+                {gstOn ? "incl." : "+"}18% GST · Billed {activeTab.toLowerCase()}
+              </div> */}
+
+              <ul style={{ listStyle: "none", padding: 0, display: "flex", flexDirection: "column", gap: 9, marginBottom: "1.5rem", flex: 1 }}>
+                {FEATURES[plan.id].map((f, i) => (
+                  <li key={i} style={{ display: "flex", alignItems: "flex-start", gap: 8, fontSize: 13, color: "#222" }}>
+                    <span style={{ color: "#22c55e", fontSize: 15, marginTop: 1, flexShrink: 0 }}>✓</span>
+                    <div>
+                      {f.text}
+                      {f.chips && (
+                        <div style={{ display: "flex", flexWrap: "wrap", gap: 4, marginTop: 4 }}>
+                          {f.chips.map((c) => (
+                            <span key={c} style={{
+                              background: c.startsWith("+") ? "#fff7ed" : "#f5f5f5",
+                              border: c.startsWith("+") ? "0.5px solid #f97316" : "0.5px solid #e0e0e0",
+                              borderRadius: 6, padding: "2px 8px",
+                              fontSize: 11,
+                              color: c.startsWith("+") ? "#f97316" : "#666",
+                            }}>
+                              {c}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </li>
+                ))}
+              </ul>
+
+              {/* <button style={{
+                width: "100%", padding: 11, borderRadius: 10,
+                fontSize: 14, fontWeight: 600, cursor: "pointer",
+                border: "2px solid #f97316",
+                background: plan.featured ? "#f97316" : "transparent",
+                color: plan.featured ? "#fff" : "#f97316",
+              }}>
+                Get Connected
+              </button> */}
+              <a
+                href="#contact"
                 style={{
-                  fontSize: "1.1rem",
+                  display: "block",
+                  width: "100%",
+                  padding: 11,
+                  borderRadius: 10,
+                  fontSize: 14,
                   fontWeight: 600,
-                  color: "#666",
+                  cursor: "pointer",
+                  border: "2px solid #f97316",
+                  background: plan.featured ? "#f97316" : "transparent",
+                  color: plan.featured ? "#fff" : "#f97316",
+                  textAlign: "center",
+                  textDecoration: "none",
+                  boxSizing: "border-box",
                 }}
               >
-                Starts from
-              </span>
-
-              <span
-                style={{
-                  fontSize: "2.2rem",
-                  fontWeight: 800,
-                  color: "#111",
-                  lineHeight: 1,
-                }}
-              >
-                {fmt(prices[plan.id])}
-              </span>
-
-              <span style={{ fontSize: 13, color: "#888" }}>/mo</span>
+                Get Connected
+              </a>
             </div>
-            <div style={{ fontSize: 11, color: "#aaa", marginBottom: "1.4rem" }}>
-              {gstOn ? "incl." : "+"}18% GST · Billed {activeTab.toLowerCase()}
-            </div>
-
-            <ul style={{ listStyle: "none", padding: 0, display: "flex", flexDirection: "column", gap: 9, marginBottom: "1.5rem", flex: 1 }}>
-              {FEATURES[plan.id].map((f, i) => (
-                <li key={i} style={{ display: "flex", alignItems: "flex-start", gap: 8, fontSize: 13, color: "#222" }}>
-                  <span style={{ color: "#22c55e", fontSize: 15, marginTop: 1, flexShrink: 0 }}>✓</span>
-                  <div>
-                    {f.text}
-                    {f.chips && (
-                      <div style={{ display: "flex", flexWrap: "wrap", gap: 4, marginTop: 4 }}>
-                        {f.chips.map((c) => (
-                          <span key={c} style={{
-                            background: c.startsWith("+") ? "#fff7ed" : "#f5f5f5",
-                            border: c.startsWith("+") ? "0.5px solid #f97316" : "0.5px solid #e0e0e0",
-                            borderRadius: 6, padding: "2px 8px",
-                            fontSize: 11,
-                            color: c.startsWith("+") ? "#f97316" : "#666",
-                          }}>
-                            {c}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </li>
-              ))}
-            </ul>
-
-            <button style={{
-              width: "100%", padding: 11, borderRadius: 10,
-              fontSize: 14, fontWeight: 600, cursor: "pointer",
-              border: "2px solid #f97316",
-              background: plan.featured ? "#f97316" : "transparent",
-              color: plan.featured ? "#fff" : "#f97316",
-            }}>
-              Get Connected
-            </button>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       <p style={{ textAlign: "center", fontSize: 12, color: "#999", marginBottom: "2rem" }}>
         Prices shown for Internet + OTT bundle at 100 Mbps. More speeds & plan types available.
       </p>
 
-      {/* View All button */}
       <div style={{ textAlign: "center" }}>
         <button
           onClick={onViewAll}
@@ -602,7 +586,6 @@ function SubPlanCard({ subPlan, planId, activeTab, gstOn }) {
         flexDirection: "column",
         minWidth: 0,
       }}>
-        {/* Sub-card header */}
         <div style={{
           background: "#fff",
           padding: "12px 14px 10px",
@@ -631,35 +614,41 @@ function SubPlanCard({ subPlan, planId, activeTab, gstOn }) {
           )}
         </div>
 
-        {/* Speed rows */}
         <div style={{ flex: 1 }}>
-          {subPlan.speeds.map((row, i) => (
-            <div
-              key={i}
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                padding: "9px 14px",
-                borderBottom: i < subPlan.speeds.length - 1 ? "0.5px solid #f0f0f0" : "none",
-                background: i % 2 === 0 ? "#fff" : "#fafafa",
-              }}
-            >
-              <span style={{
-                fontSize: 13, color: "#333", fontWeight: 500,
-                background: "#f0f0f0", padding: "2px 8px",
-                borderRadius: 6, display: "inline-block",
-              }}>
-                {row.speed}
-              </span>
-              <div style={{ textAlign: "right" }}>
-                <div style={{ fontSize: 15, fontWeight: 700, color: "#f97316" }}>
-                  {calcPrice(row.base, activeTab, gstOn)}
+          {subPlan.speeds.map((row, i) => {
+            const cycleData = row[activeTab];
+            const totalDisplay = fmtINR(applyGst(cycleData.total, gstOn));
+            const effDisplay = fmtINR(applyGst(cycleData.eff, gstOn));
+            return (
+              <div
+                key={i}
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  padding: "9px 14px",
+                  borderBottom: i < subPlan.speeds.length - 1 ? "0.5px solid #f0f0f0" : "none",
+                  background: i % 2 === 0 ? "#fff" : "#fafafa",
+                }}
+              >
+                <span style={{
+                  fontSize: 13, color: "#333", fontWeight: 500,
+                  background: "#f0f0f0", padding: "2px 8px",
+                  borderRadius: 6, display: "inline-block",
+                }}>
+                  {row.speed}
+                </span>
+                <div style={{ textAlign: "right" }}>
+                  <div style={{ fontSize: 15, fontWeight: 700, color: "#f97316" }}>
+                    {totalDisplay}
+                  </div>
+                  <div style={{ fontSize: 10, color: "#bbb" }}>
+                    {effDisplay}/month effective
+                  </div>
                 </div>
-                <div style={{ fontSize: 10, color: "#bbb" }}>/month effective</div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </>
@@ -686,7 +675,6 @@ function AllPlansPage({ activeTab, gstOn }) {
               position: "relative",
             }}
           >
-            {/* Outer card header */}
             {plan.featured && (
               <div style={{
                 position: "absolute", top: -1, left: "50%",
@@ -741,14 +729,12 @@ function AllPlansPage({ activeTab, gstOn }) {
               </div>
             </div>
 
-            {/* 4 sub-plan cards — horizontal scroll on small screens */}
             <div style={{ padding: "1.25rem 1.5rem 1.5rem" }}>
               <div style={{
                 display: "grid",
                 gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
                 gap: "1rem",
               }}>
-                {console.log(plan.subPlans)}
                 {plan.subPlans.map((sp) => (
                   <SubPlanCard
                     key={sp.label}
@@ -774,19 +760,18 @@ function AllPlansPage({ activeTab, gstOn }) {
 // ─── Root ─────────────────────────────────────────────────────────────────────
 
 export default function SunFiberPlans() {
-  const [page, setPage] = useState("main");   // "main" | "all"
+  const [page, setPage] = useState("main");
   const [activeTab, setActiveTab] = useState("Yearly");
   const [gstOn, setGstOn] = useState(false);
 
   return (
-    <div style={{
+    <section style={{
       fontFamily: "'Segoe UI', system-ui, sans-serif",
       color: "#1a1a1a",
       maxWidth: 1100,
       margin: "0 auto",
       padding: "2rem 1rem",
-    }}>
-      {/* Shared header always visible */}
+    }} id="plans">
       <PlanHeader
         activeTab={activeTab}
         setActiveTab={setActiveTab}
@@ -796,7 +781,6 @@ export default function SunFiberPlans() {
         onBack={() => setPage("main")}
       />
 
-      {/* Page body */}
       {page === "main" ? (
         <MainPage
           activeTab={activeTab}
@@ -809,6 +793,6 @@ export default function SunFiberPlans() {
           gstOn={gstOn}
         />
       )}
-    </div>
+    </section>
   );
 }
