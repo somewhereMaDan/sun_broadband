@@ -206,7 +206,7 @@ export default function NatureSection() {
 
           {/* CTA row */}
           <div style={{ display:"flex",gap:14,justifyContent:"center",flexWrap:"wrap",...fadeStyle(".62s") }}>
-            <button
+            {/* <button
               style={{
                 display:"inline-flex",alignItems:"center",gap:9,
                 background: hov ? "#559f6e" : "#4a7c59",
@@ -221,11 +221,11 @@ export default function NatureSection() {
               }}
               onMouseEnter={() => setHov(true)}
               onMouseLeave={() => setHov(false)}
-              onClick={() => window.open("https://www.nature.org","_blank")}
+              onClick={() => window.open("https://carbonworldeconomics.org","_blank")}
             >
               Explore Our Initiative
               <span style={{ display:"inline-block",transition:"transform .2s",transform:hov?"translateX(4px)":"translateX(0)" }}>→</span>
-            </button>
+            </button> */}
 
             <button
               className="ns-btn2"
@@ -236,9 +236,9 @@ export default function NatureSection() {
                 padding:"15px 30px",fontSize:14,fontFamily:"'Courier New',monospace",
                 letterSpacing:".04em",cursor:"pointer",transition:"all .22s",
               }}
-              onClick={() => window.open("https://www.nature.org/en-us/get-involved/","_blank")}
+              onClick={() => window.open("https://carbonworldeconomics.org","_blank")}
             >
-              🌱 Join the Movement
+              🌱 Explore Our Initiative
             </button>
           </div>
         </div>

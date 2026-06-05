@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import './App.css'
 import NatureSection from './NatureSection'
+import PlansSection from './PlansSection'
+import SunFiberPlans from './SunFiberPlans'
 
 const ALL_OTT_APPS = [
   'Amazon Prime Video', 'Lionsgate Play', 'Stage', 'Bhaktflix',
@@ -122,7 +124,7 @@ export default function App() {
           <li><a href="#contact">Support</a></li>
         </ul>
         <div className="nav-right">
-          <a href="tel:+911234567890" className="nav-call">📞 Call Us</a>
+          <a href="tel:07714744444" className="nav-call">📞 Call Us</a>
           <a href="https://userlogin.sunbroadband.in/login" target='_blank' className="btn-nav">Login</a>
           <button
             className={`hamburger${menuOpen ? ' open' : ''}`}
@@ -147,7 +149,7 @@ export default function App() {
               <a href="#contact" onClick={closeMenu}>Support</a>
             </nav>
             <div className="mobile-nav-bottom">
-              <a href="tel:+911234567890" className="mobile-call" onClick={closeMenu}>📞 Call Us</a>
+              <a href="tel:07714744444" className="mobile-call" onClick={closeMenu}>📞 Call Us</a>
               <a href="https://userlogin.sunbroadband.in/login" target='_blank' className="btn-nav" onClick={closeMenu}>Login</a>
             </div>
           </div>
@@ -160,10 +162,10 @@ export default function App() {
           <div className="hero-eyebrow">
             <span className="live-dot"></span>Now Live across Raipur, Chhattisgarh
           </div>
-          <h1>Your favorite <em>OTT apps</em>,<br />at blazing fiber speed.</h1>
+          <h1>Experience <em>Blazing-Fast</em><br />Fiber Internet in Raipur.</h1>
           <p className="hero-sub">
-            Sun Broadband bundles 24+ streaming platforms with ultra-fast fiber internet.
-            One connection. Zero compromise.
+            Sun Broadband delivers ultra-reliable connectivity for your home and business —
+            built on cutting-edge fiber technology with unbeatable speed and uptime.
           </p>
           <div className="hero-btns">
             <a href="#plans" className="btn-hp">View All Plans →</a>
@@ -262,8 +264,8 @@ export default function App() {
           <div className="why-grid reveal">
             <div className="why-cell">
               <div className="why-ic">⚡</div>
-              <div className="why-title">Fiber-Optic Speed</div>
-              <p className="why-desc">Up to 1 Gbps pure fiber — stream 4K, video call, and game simultaneously without any slowdown.</p>
+              <div className="why-title">Blazing Speeds</div>
+              <p className="why-desc">Up to 1 Gbps speeds for seamless streaming, gaming, and productivity — no throttling, ever.</p>
             </div>
             <div className="why-cell">
               <div className="why-ic">🎬</div>
@@ -277,135 +279,26 @@ export default function App() {
             </div>
             <div className="why-cell">
               <div className="why-ic">🛡️</div>
-              <div className="why-title">99.9% Uptime SLA</div>
-              <p className="why-desc">Enterprise-grade redundant fiber infrastructure. Stable connection even during peak hours.</p>
+              <div className="why-title">99.9% Uptime</div>
+              <p className="why-desc">Reliable, enterprise-grade fiber network designed for stability — even during peak hours.</p>
             </div>
             <div className="why-cell">
               <div className="why-ic">🧑‍💻</div>
-              <div className="why-title">24×7 Raipur Support</div>
-              <p className="why-desc">Real engineers in Raipur — not bots. Instant callbacks and rapid on-site response guaranteed.</p>
+              <div className="why-title">Local Support 24×7</div>
+              <p className="why-desc">Our Raipur-based support team is available round the clock for all your needs — real people, not bots.</p>
             </div>
             <div className="why-cell">
               <div className="why-ic">💰</div>
-              <div className="why-title">Zero Hidden Charges</div>
-              <p className="why-desc">Free router. No surprise fees. Transparent billing from day one — what you see is what you pay.</p>
+              <div className="why-title">Transparent Pricing</div>
+              <p className="why-desc">No hidden costs — just clear, affordable broadband plans. Free router included from day one.</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* PLANS */}
-      <section className="sec plans-sec" id="plans">
-        <div className="sec-inner">
-          <div className="reveal sec-center">
-            <span className="eyebrow">Plans &amp; Pricing</span>
-            <h2 className="sec-h">Simple, honest pricing.</h2>
-            <p className="sec-p" style={{ margin: '0 auto 40px' }}>
-              All plans include unlimited data, free router, and OTT bundles — no contracts, no surprises.
-            </p>
-          </div>
-          <div className="plans-row reveal">
-            {/* Starter */}
-            <div className="plan-card">
-              <div className="plan-tier">Lite</div>
-              <div className="plan-name">Starter</div>
-              <div className="plan-speed">Up to <strong>40 Mbps</strong> fiber speed</div>
-              <div className="price-row">
-                <span className="p-sym">₹</span>
-                <span className="p-amt">399</span>
-                <span className="p-per">/mo</span>
-              </div>
-              <div className="p-gst">+18% GST · Billed annually</div>
-              <div className="p-div"></div>
-              <ul className="p-feats">
-                <li><span className="ck">✓</span> Unlimited data, no FUP</li>
-                <li><span className="ck">✓</span> Free WiFi Router</li>
-                <li>
-                  <span className="ck">✓</span>
-                  <div>
-                    <strong>20 OTT apps</strong> included
-                    <OttChips
-                      initial={['Jiohotstar', 'SonyLiv']}
-                      all={STARTER_APPS}
-                    />
-                  </div>
-                </li>
-                <li><span className="ck">✓</span> <strong>483 live channels</strong> via IPTV</li>
-                <li><span className="ck">✓</span> 24×7 customer support</li>
-              </ul>
-              <a href="#contact" className="p-btn out">Get Started</a>
-            </div>
-
-            {/* Standard */}
-            <div className="plan-card pop">
-              <div className="pop-label">Most Popular</div>
-              <div className="plan-tier f">Prime</div>
-              <div className="plan-name">Standard</div>
-              <div className="plan-speed">Up to <strong>100 Mbps</strong> fiber speed</div>
-              <div className="price-row">
-                <span className="p-sym">₹</span>
-                <span className="p-amt">599</span>
-                <span className="p-per">/mo</span>
-              </div>
-              <div className="p-gst">+18% GST · Billed annually</div>
-              <div className="p-div"></div>
-              <ul className="p-feats">
-                <li><span className="ck">✓</span> Unlimited data, no FUP</li>
-                <li><span className="ck">✓</span> Free WiFi Router</li>
-                <li>
-                  <span className="ck">✓</span>
-                  <div>
-                    <strong>21 OTT apps</strong> incl. Zee5
-                    <OttChips
-                      initial={['Jiohotstar', 'SonyLiv', 'Zee5']}
-                      all={STANDARD_APPS}
-                    />
-                  </div>
-                </li>
-                <li><span className="ck">✓</span> <strong>491 live channels</strong> via IPTV</li>
-                <li><span className="ck">✓</span> Priority 24×7 support</li>
-                <li><span className="ck">✓</span> Static IP available</li>
-              </ul>
-              <a href="#contact" className="p-btn pri">Get Started</a>
-            </div>
-
-            {/* Ultra */}
-            <div className="plan-card">
-              <div className="plan-tier">Max</div>
-              <div className="plan-name">Ultra</div>
-              <div className="plan-speed">Up to <strong>300 Mbps</strong> fiber speed</div>
-              <div className="price-row">
-                <span className="p-sym">₹</span>
-                <span className="p-amt">999</span>
-                <span className="p-per">/mo</span>
-              </div>
-              <div className="p-gst">+18% GST · Billed annually</div>
-              <div className="p-div"></div>
-              <ul className="p-feats">
-                <li><span className="ck">✓</span> Unlimited data, no FUP</li>
-                <li><span className="ck">✓</span> Free WiFi Router</li>
-                <li>
-                  <span className="ck">✓</span>
-                  <div>
-                    <strong>24 OTT apps</strong> — all platforms
-                    <OttChips
-                      initial={['Jiohotstar', 'SonyLiv', 'Zee5', 'Prime Video', 'Lionsgate', 'Stage']}
-                      all={ULTRA_APPS}
-                    />
-                  </div>
-                </li>
-                <li><span className="ck">✓</span> <strong>506 live channels</strong> via IPTV</li>
-                <li><span className="ck">✓</span> Priority 24×7 support</li>
-                <li><span className="ck">✓</span> Static IP + CCTV ready</li>
-              </ul>
-              <a href="#contact" className="p-btn out">Get Started</a>
-            </div>
-          </div>
-          <p className="plans-note reveal">
-            All plans include free installation · Prices are indicative — contact for exact quote · GST extra
-          </p>
-        </div>
-      </section>
+      {/* <PlansSection /> */}
+      <SunFiberPlans/>
 
       {/* OTT DETAIL */}
       <section className="sec ott-dark" id="ott">
@@ -414,8 +307,8 @@ export default function App() {
             <span className="eyebrow">Entertainment Bundle</span>
             <h2 className="sec-h">Every streaming app.<br />One subscription.</h2>
             <p className="sec-p">
-              We've bundled India's top OTT platforms with your fiber plan so you never pay
-              separate subscription fees again.
+              Choose plans with your favourite OTT apps — all in one subscription, so you never
+              pay separate fees again.
             </p>
             <div className="ott-counts">
               <div><div className="oc-num">24+</div><div className="oc-label">OTT platforms</div></div>
@@ -513,7 +406,7 @@ export default function App() {
           <div className="reveal">
             <span className="eyebrow">Service Areas</span>
             <h2 className="sec-h">Are we in<br />your area?</h2>
-            <p className="sec-p">Expanding rapidly across Raipur. New residential and commercial zones added every month.</p>
+            <p className="sec-p">Connecting Raipur's most vibrant neighborhoods with lightning-fast fiber internet. New zones added every month.</p>
             <div style={{ marginTop: '1.5rem' }}>
               <a href="#contact" className="cov-link">Request your area →</a>
             </div>
@@ -551,7 +444,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* {Nature Section} */}
+      {/* Nature Section */}
       <NatureSection />
 
       {/* TESTIMONIALS */}
@@ -597,8 +490,8 @@ export default function App() {
           <h2 className="sec-h">Ready to switch?<br />We'll call in 10 minutes.</h2>
           <p className="sec-p">No commitment. No paperwork. Just tell us your address and we handle the rest.</p>
           <div className="cta-btns">
-            <a href="tel:+911234567890" className="b-orange">📞 Call Now</a>
-            <a href="https://wa.me/911234567890" className="b-wa">💬 WhatsApp Us</a>
+            <a href="tel:07714744444" className="b-orange">📞 Call Now</a>
+            <a href="https://wa.me/917714744444" className="b-wa">💬 WhatsApp Us</a>
             <a href="#plans" className="b-ghost">View Plans</a>
           </div>
           <div className="trust-row">
@@ -619,6 +512,10 @@ export default function App() {
               <span>Sun<span style={{ color: 'var(--brand)' }}>Broadband</span></span>
             </div>
             <p>High-speed fiber internet with 24+ OTT apps across Raipur, Chhattisgarh. Reliable, affordable, and backed by real local support.</p>
+            <p style={{ marginTop: '0.75rem', fontSize: '0.85rem', opacity: 0.7 }}>
+              Top Floor, CG Elite Complex, Opp. Mandi Gate,<br />
+              Vidhan Sabha Road, Pandri, Raipur – 492001
+            </p>
           </div>
           <div className="foot-col">
             <h5>Plans</h5>
@@ -644,6 +541,7 @@ export default function App() {
               <li><a href="#">Help Center</a></li>
               <li><a href="#">Pay Bill</a></li>
               <li><a href="#">Raise Ticket</a></li>
+              <li><a href="mailto:care@sunbroadband.in">care@sunbroadband.in</a></li>
               <li><a href="#">Privacy Policy</a></li>
             </ul>
           </div>
