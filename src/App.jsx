@@ -3,6 +3,7 @@ import './App.css'
 import NatureSection from './NatureSection'
 import PlansSection from './PlansSection'
 import SunFiberPlans from './SunFiberPlans'
+import NewNatureSection from './NewNatureSection'
 
 const ALL_OTT_APPS = [
   'Amazon Prime Video', 'Lionsgate Play', 'Stage', 'Bhaktflix',
@@ -445,7 +446,8 @@ export default function App() {
       </section>
 
       {/* Nature Section */}
-      <NatureSection />
+      {/* <NatureSection /> */}
+      <NewNatureSection/>
 
       {/* TESTIMONIALS */}
       <section className="sec testi-bg">
