@@ -15,7 +15,6 @@ const stats = [
   { value: "100%", label: "Plant-based, chemical-free", icon: "🌿" },
 ];
 
-// Inject scoped CSS once — prefixed with "ns-" to avoid clashing with page styles
 const STYLE_ID = "ns-styles-v2";
 const CSS = `
 @keyframes ns-float {
@@ -42,9 +41,10 @@ const CSS = `
   border-color: rgba(126,200,154,.35) !important;
 }
 .ns-btn2:hover {
-  background: rgba(74,124,89,.12) !important;
-  border-color: rgba(126,200,154,.5) !important;
+  background: rgba(74,124,89,.2) !important;
+  border-color: rgba(126,200,154,.55) !important;
   color: #c8e4d0 !important;
+  transform: translateY(-2px) !important;
 }
 `;
 
@@ -57,9 +57,7 @@ function injectStyles() {
   document.head.appendChild(s);
 }
 
-export default function NewNatureSection() {
-  const [hov, setHov] = useState(false);
-  // Start visible=true so content is never invisible if IO doesn't fire
+export default function NewNatureSection({ onBlogOpen }) {
   const [visible, setVisible] = useState(false);
   const ref = useRef(null);
 
@@ -68,7 +66,6 @@ export default function NewNatureSection() {
   }, []);
 
   useEffect(() => {
-    // If the section is already in the viewport on mount, setVisible immediately
     const el = ref.current;
     if (!el) return;
     const rect = el.getBoundingClientRect();
@@ -208,27 +205,6 @@ export default function NewNatureSection() {
 
           {/* CTA row */}
           <div style={{ display:"flex",gap:14,justifyContent:"center",flexWrap:"wrap",...fadeStyle(".62s") }}>
-            {/* <button
-              style={{
-                display:"inline-flex",alignItems:"center",gap:9,
-                background: hov ? "#559f6e" : "#4a7c59",
-                color:"#e4f3e9",border:"none",borderRadius:100,
-                padding:"15px 34px",fontSize:14,fontFamily:"'Courier New',monospace",
-                letterSpacing:".06em",cursor:"pointer",
-                transition:"background .22s,transform .2s,box-shadow .22s",
-                transform: hov ? "translateY(-2px) scale(1.025)" : "scale(1)",
-                boxShadow: hov
-                  ? "0 10px 32px rgba(74,124,89,.44),0 0 0 1px rgba(126,200,154,.28)"
-                  : "0 4px 18px rgba(74,124,89,.28)",
-              }}
-              onMouseEnter={() => setHov(true)}
-              onMouseLeave={() => setHov(false)}
-              onClick={() => window.open("https://carbonworldeconomics.org","_blank")}
-            >
-              Explore Our Initiative
-              <span style={{ display:"inline-block",transition:"transform .2s",transform:hov?"translateX(4px)":"translateX(0)" }}>→</span>
-            </button> */}
-
             <button
               className="ns-btn2"
               style={{
@@ -236,16 +212,26 @@ export default function NewNatureSection() {
                 background:"transparent",color:"rgba(196,218,202,.75)",
                 border:"1px solid rgba(74,124,89,.32)",borderRadius:100,
                 padding:"15px 30px",fontSize:14,fontFamily:"'Courier New',monospace",
-                letterSpacing:".04em",cursor:"pointer",transition:"all .22s",
+                letterSpacing:".04em",cursor:"pointer",
+                transition:"all .22s",
               }}
-              onClick={() => window.open("https://carbonworldeconomics.org","_blank")}
+              onClick={() => {
+                // Navigate to the blog page
+                if (typeof onBlogOpen === "function") {
+                  onBlogOpen();
+                } else {
+                  // Fallback: use hash routing if onBlogOpen not passed
+                  window.location.hash = "blog";
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }
+              }}
             >
               🌱 Explore Our Initiative
             </button>
           </div>
         </div>
 
-        {/* Footer tagline — padding-top keeps it in flow */}
+        {/* Footer tagline */}
         <p style={{
           position:"relative",zIndex:2,
           marginTop:52,marginBottom:0,

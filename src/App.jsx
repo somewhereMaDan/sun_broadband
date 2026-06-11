@@ -4,6 +4,7 @@ import NatureSection from './NatureSection'
 import PlansSection from './PlansSection'
 import SunFiberPlans from './SunFiberPlans'
 import NewNatureSection from './NewNatureSection'
+import BlogPage from './BlogPage'
 
 const ALL_OTT_APPS = [
   'Amazon Prime Video', 'Lionsgate Play', 'Stage', 'Bhaktflix',
@@ -85,6 +86,36 @@ function MoreAppsCard() {
 export default function App() {
   const [navScrolled, setNavScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+  // Hash-based routing: "home" | "blog"
+  const [page, setPage] = useState(() => {
+    return window.location.hash === '#blog' ? 'blog' : 'home'
+  })
+
+  // Sync page state with browser hash changes (back/forward buttons)
+  useEffect(() => {
+    const onHashChange = () => {
+      const newPage = window.location.hash === '#blog' ? 'blog' : 'home'
+      setPage(newPage)
+    }
+    window.addEventListener('hashchange', onHashChange)
+    return () => window.removeEventListener('hashchange', onHashChange)
+  }, [])
+
+  const openBlog = () => {
+    window.location.hash = 'blog'
+    setPage('blog')
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  const closeBlog = () => {
+    window.location.hash = ''
+    setPage('home')
+    // Scroll to the nature section after returning
+    setTimeout(() => {
+      const el = document.getElementById('nature-initiative')
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 80)
+  }
 
   useEffect(() => {
     const onScroll = () => setNavScrolled(window.scrollY > 20)
@@ -101,7 +132,7 @@ export default function App() {
     }, { threshold: 0.1 })
     els.forEach(el => io.observe(el))
     return () => io.disconnect()
-  }, [])
+  }, [page]) // re-run when page changes to catch reveal elements
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? 'hidden' : ''
@@ -110,6 +141,12 @@ export default function App() {
 
   const closeMenu = () => setMenuOpen(false)
 
+  // ── Blog page ──
+  if (page === 'blog') {
+    return <BlogPage onBack={closeBlog} />
+  }
+
+  // ── Main SPA ──
   return (
     <>
       {/* NAV */}
@@ -299,7 +336,7 @@ export default function App() {
 
       {/* PLANS */}
       {/* <PlansSection /> */}
-      <SunFiberPlans/>
+      <SunFiberPlans />
 
       {/* OTT DETAIL */}
       <section className="sec ott-dark" id="ott">
@@ -445,9 +482,10 @@ export default function App() {
         </div>
       </section>
 
-      {/* Nature Section */}
-      {/* <NatureSection /> */}
-      <NewNatureSection/>
+      {/* Nature / Initiative Section */}
+      <div id="nature-initiative">
+        <NewNatureSection onBlogOpen={openBlog} />
+      </div>
 
       {/* TESTIMONIALS */}
       <section className="sec testi-bg">
@@ -467,7 +505,7 @@ export default function App() {
             </div>
             <div className="testi-c reveal" style={{ transitionDelay: '0.1s' }}>
               <div className="t-stars">★★★★★</div>
-              <p className="t-quote">"The OTT bundle is genuinely great value. We cancelled our separate Hotstar, Zee5, and SonyLIV — it's all inside the plan. The savings alone cover the broadband cost."</p>
+              <p className="t-quote">"The OTT bundle is genuinely great value. We cancelled our separate Hotstar, Zee5, and SonyLIV — it's all inside the plan. The savings alone cover the broadband band cost."</p>
               <div className="t-person">
                 <div className="t-av" style={{ background: '#2563EB' }}>PS</div>
                 <div><div className="t-name">Priya Sharma</div><div className="t-loc">Homemaker · Hiranandani Gardens</div></div>
@@ -514,10 +552,10 @@ export default function App() {
               <span>Sun<span style={{ color: 'var(--brand)' }}>Broadband</span></span>
             </div>
             <p>High-speed fiber internet with 24+ OTT apps across Raipur, Chhattisgarh. Reliable, affordable, and backed by real local support.</p>
-            <p style={{ marginTop: '0.75rem', fontSize: '0.85rem', opacity: 0.7 }}>
+            {/* <p style={{ marginTop: '0.75rem', fontSize: '0.85rem', opacity: 0.7 }}>
               Top Floor, CG Elite Complex, Opp. Mandi Gate,<br />
               Vidhan Sabha Road, Pandri, Raipur – 492001
-            </p>
+            </p> */}
           </div>
           <div className="foot-col">
             <h5>Plans</h5>
@@ -533,18 +571,23 @@ export default function App() {
             <ul>
               <li><a href="#">About Us</a></li>
               <li><a href="#coverage">Coverage</a></li>
-              <li><a href="#">Careers</a></li>
-              <li><a href="#">Press</a></li>
+              {/* <li><a href="#">Careers</a></li> */}
+              {/* <li><a href="#">Press</a></li> */}
             </ul>
           </div>
           <div className="foot-col">
-            <h5>Support</h5>
+            <h5>Contact Us</h5>
             <ul>
-              <li><a href="#">Help Center</a></li>
-              <li><a href="#">Pay Bill</a></li>
-              <li><a href="#">Raise Ticket</a></li>
-              <li><a href="mailto:care@sunbroadband.in">care@sunbroadband.in</a></li>
-              <li><a href="#">Privacy Policy</a></li>
+              <li style={{ display: 'flex', gap: '8px', alignItems: 'flex-start', marginBottom: '8px', color: "grey" }}>
+                <span>📍</span>
+                <span>Top Floor, CG Elite Complex, Opp. Mandi Gate, Vidhan Sabha Road, Pandri, Raipur – 492001</span>
+              </li>
+              <li>
+                <a href="tel:07714744444">📞 07714744444</a>
+              </li>
+              <li>
+                <a href="mailto:care@sunbroadband.in">✉️ care@sunbroadband.in</a>
+              </li>
             </ul>
           </div>
         </div>
