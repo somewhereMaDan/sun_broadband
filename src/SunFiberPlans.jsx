@@ -532,7 +532,9 @@ function AllPlansPage({ activeTab, gstOn }) {
                 }}>
                   {plan.ottCount} OTT Apps
                 </div>
-                <button style={{
+                <button
+                onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })} 
+                style={{
                   background: "#f97316", color: "#fff",
                   border: "none", borderRadius: 8,
                   padding: "5px 16px", fontSize: 12,
