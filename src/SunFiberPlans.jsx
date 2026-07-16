@@ -1,186 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 
-// ─── Data ─────────────────────────────────────────────────────────────────────
+// ─── Config ───────────────────────────────────────────────────────────────────
+
+// Point this at your backend. If you're on Vite, you can swap this for
+// `import.meta.env.VITE_API_URL || "http://localhost:4000"` and set
+// VITE_API_URL in a .env file for production builds.
+// const API_BASE_URL = "http://localhost:5000";
+const API_BASE_URL = import.meta.env.VITE_API_URL
 
 const TABS = ["Monthly", "Quarterly", "Half-Yearly", "Yearly"];
-
-const OTT_APPS = {
-  lite: [
-    "JioHotstar", "SonyLiv", "ZEE5", "Sun NXT", "Discovery+", "Lionsgate Play",
-    "ShemarooMe", "FanCode", "Docubay", "Aha", "Hoichoi", "Planet Marathi",
-    "Klikk", "Nammaflix", "Stage", "Koode", "Neestream", "Oho Gujarati",
-    "Fauji", "EpicOn",
-  ],
-  prime: [
-    "JioHotstar", "SonyLiv", "ZEE5", "Sun NXT", "Discovery+", "Lionsgate Play",
-    "ShemarooMe", "FanCode", "Docubay", "Aha", "Hoichoi", "Planet Marathi",
-    "Klikk", "Nammaflix", "Stage", "Koode", "Neestream", "Oho Gujarati",
-    "Fauji", "EpicOn", "Zee5 Premium",
-  ],
-  max: [
-    "JioHotstar", "SonyLiv", "ZEE5", "Prime Video", "Sun NXT", "Discovery+",
-    "Lionsgate Play", "ShemarooMe", "FanCode", "Docubay", "Aha", "Hoichoi",
-    "Planet Marathi", "Klikk", "Nammaflix", "Stage", "Koode", "Neestream",
-    "Oho Gujarati", "Fauji", "EpicOn", "Zee5 Premium", "Manorama Max", "Tata Play",
-  ],
-};
-
-// Each speed row: { speed, Monthly, Quarterly, "Half-Yearly", Yearly }
-// Each cycle value: { total (billed that cycle), eff (effective per month) }
-
-const PLANS = [
-  {
-    id: "lite",
-    tier: "SMARTLINK LITE",
-    name: "Smartlink Lite",
-    meta: "20 OTT Apps · 483 Live Channels (21 HD)",
-    featured: false,
-    ottCount: 20,
-    subPlans: [
-      {
-        label: "Internet Only",
-        hasOtt: false,
-        speeds: [
-          { speed: "50 Mbps", Monthly: { total: 499, eff: 499 }, Quarterly: { total: 1497, eff: 499 }, "Half-Yearly": { total: 2749, eff: 458 }, Yearly: { total: 4999, eff: 417 } },
-          { speed: "100 Mbps", Monthly: { total: 599, eff: 599 }, Quarterly: { total: 1797, eff: 599 }, "Half-Yearly": { total: 3299, eff: 550 }, Yearly: { total: 5999, eff: 500 } },
-          { speed: "200 Mbps", Monthly: { total: 899, eff: 899 }, Quarterly: { total: 2697, eff: 899 }, "Half-Yearly": { total: 4999, eff: 833 }, Yearly: { total: 8999, eff: 750 } },
-        ],
-      },
-      {
-        label: "Internet + OTT 20 Apps",
-        hasOtt: true,
-        speeds: [
-          { speed: "100 Mbps", Monthly: { total: 800, eff: 800 }, Quarterly: { total: 2250, eff: 750 }, "Half-Yearly": { total: 4200, eff: 700 }, Yearly: { total: 7800, eff: 650 } },
-          { speed: "150 Mbps", Monthly: { total: 900, eff: 900 }, Quarterly: { total: 2550, eff: 850 }, "Half-Yearly": { total: 4800, eff: 800 }, Yearly: { total: 9000, eff: 750 } },
-          { speed: "200 Mbps", Monthly: { total: 1000, eff: 1000 }, Quarterly: { total: 2850, eff: 950 }, "Half-Yearly": { total: 5250, eff: 875 }, Yearly: { total: 9600, eff: 800 } },
-          { speed: "300 Mbps", Monthly: { total: 1500, eff: 1500 }, Quarterly: { total: 4350, eff: 1450 }, "Half-Yearly": { total: 8100, eff: 1350 }, Yearly: { total: 15000, eff: 1250 } },
-        ],
-      },
-      {
-        label: "Internet + IPTV",
-        hasOtt: false,
-        speeds: [
-          { speed: "100 Mbps", Monthly: { total: 1000, eff: 1000 }, Quarterly: { total: 2847, eff: 949 }, "Half-Yearly": { total: 5394, eff: 899 }, Yearly: { total: 10188, eff: 849 } },
-          { speed: "200 Mbps", Monthly: { total: 1400, eff: 1400 }, Quarterly: { total: 3597, eff: 1199 }, "Half-Yearly": { total: 6744, eff: 1124 }, Yearly: { total: 12588, eff: 1049 } },
-          { speed: "300 Mbps", Monthly: { total: 1800, eff: 1800 }, Quarterly: { total: 4497, eff: 1499 }, "Half-Yearly": { total: 8394, eff: 1399 }, Yearly: { total: 15588, eff: 1299 } },
-        ],
-      },
-      {
-        label: "Internet + OTT + IPTV 20 Apps",
-        hasOtt: true,
-        speeds: [
-          { speed: "100 Mbps", Monthly: { total: 1100, eff: 1100 }, Quarterly: { total: 2997, eff: 999 }, "Half-Yearly": { total: 5694, eff: 949 }, Yearly: { total: 10788, eff: 899 } },
-          { speed: "200 Mbps", Monthly: { total: 1549, eff: 1549 }, Quarterly: { total: 3747, eff: 1249 }, "Half-Yearly": { total: 7044, eff: 1174 }, Yearly: { total: 13188, eff: 1099 } },
-          { speed: "300 Mbps", Monthly: { total: 2099, eff: 2099 }, Quarterly: { total: 4677, eff: 1559 }, "Half-Yearly": { total: 8694, eff: 1449 }, Yearly: { total: 16188, eff: 1349 } },
-        ],
-      },
-    ],
-  },
-  {
-    id: "prime",
-    tier: "SMARTLINK PRIME",
-    name: "Smartlink Prime",
-    meta: "21 OTT Apps · 491 Live Channels (59 HD)",
-    featured: true,
-    ottCount: 21,
-    subPlans: [
-      {
-        label: "Internet Only",
-        hasOtt: false,
-        speeds: [
-          { speed: "50 Mbps", Monthly: { total: 499, eff: 499 }, Quarterly: { total: 1497, eff: 499 }, "Half-Yearly": { total: 2749, eff: 458 }, Yearly: { total: 4999, eff: 417 } },
-          { speed: "100 Mbps", Monthly: { total: 599, eff: 599 }, Quarterly: { total: 1797, eff: 599 }, "Half-Yearly": { total: 3299, eff: 550 }, Yearly: { total: 5999, eff: 500 } },
-          { speed: "200 Mbps", Monthly: { total: 899, eff: 899 }, Quarterly: { total: 2697, eff: 899 }, "Half-Yearly": { total: 4999, eff: 833 }, Yearly: { total: 8999, eff: 750 } },
-        ],
-      },
-      {
-        label: "Internet + OTT 21 Apps",
-        hasOtt: true,
-        speeds: [
-          { speed: "100 Mbps", Monthly: { total: 850, eff: 850 }, Quarterly: { total: 2400, eff: 800 }, "Half-Yearly": { total: 4500, eff: 750 }, Yearly: { total: 8400, eff: 700 } },
-          { speed: "150 Mbps", Monthly: { total: 950, eff: 950 }, Quarterly: { total: 2700, eff: 900 }, "Half-Yearly": { total: 5100, eff: 850 }, Yearly: { total: 9600, eff: 800 } },
-          { speed: "200 Mbps", Monthly: { total: 1050, eff: 1050 }, Quarterly: { total: 3000, eff: 1000 }, "Half-Yearly": { total: 5550, eff: 925 }, Yearly: { total: 10200, eff: 850 } },
-          { speed: "300 Mbps", Monthly: { total: 1600, eff: 1600 }, Quarterly: { total: 4500, eff: 1500 }, "Half-Yearly": { total: 8400, eff: 1400 }, Yearly: { total: 15600, eff: 1300 } },
-        ],
-      },
-      {
-        label: "Internet + IPTV",
-        hasOtt: false,
-        speeds: [
-          { speed: "100 Mbps", Monthly: { total: 1149, eff: 1149 }, Quarterly: { total: 3147, eff: 1049 }, "Half-Yearly": { total: 5994, eff: 999 }, Yearly: { total: 11388, eff: 949 } },
-          { speed: "200 Mbps", Monthly: { total: 1299, eff: 1299 }, Quarterly: { total: 3672, eff: 1224 }, "Half-Yearly": { total: 7044, eff: 1174 }, Yearly: { total: 13188, eff: 1099 } },
-          { speed: "300 Mbps", Monthly: { total: 1599, eff: 1599 }, Quarterly: { total: 4947, eff: 1649 }, "Half-Yearly": { total: 9294, eff: 1549 }, Yearly: { total: 17388, eff: 1449 } },
-        ],
-      },
-      {
-        label: "Internet + OTT + IPTV 21 Apps",
-        hasOtt: true,
-        speeds: [
-          { speed: "100 Mbps", Monthly: { total: 1199, eff: 1199 }, Quarterly: { total: 3297, eff: 1099 }, "Half-Yearly": { total: 6294, eff: 1049 }, Yearly: { total: 11988, eff: 999 } },
-          { speed: "200 Mbps", Monthly: { total: 1399, eff: 1399 }, Quarterly: { total: 3897, eff: 1299 }, "Half-Yearly": { total: 7344, eff: 1224 }, Yearly: { total: 13788, eff: 1149 } },
-          { speed: "300 Mbps", Monthly: { total: 1849, eff: 1849 }, Quarterly: { total: 5397, eff: 1799 }, "Half-Yearly": { total: 10194, eff: 1699 }, Yearly: { total: 19188, eff: 1599 } },
-        ],
-      },
-    ],
-  },
-  {
-    id: "max",
-    tier: "SMARTLINK MAX",
-    name: "Smartlink Max",
-    meta: "24 OTT Apps · 506 Live Channels (74 HD)",
-    featured: false,
-    ottCount: 24,
-    subPlans: [
-      {
-        label: "Internet Only",
-        hasOtt: false,
-        speeds: [
-          { speed: "50 Mbps", Monthly: { total: 499, eff: 499 }, Quarterly: { total: 1497, eff: 499 }, "Half-Yearly": { total: 2749, eff: 458 }, Yearly: { total: 4999, eff: 417 } },
-          { speed: "100 Mbps", Monthly: { total: 599, eff: 599 }, Quarterly: { total: 1797, eff: 599 }, "Half-Yearly": { total: 3299, eff: 550 }, Yearly: { total: 5999, eff: 500 } },
-          { speed: "200 Mbps", Monthly: { total: 899, eff: 899 }, Quarterly: { total: 2697, eff: 899 }, "Half-Yearly": { total: 4999, eff: 833 }, Yearly: { total: 8999, eff: 750 } },
-        ],
-      },
-      {
-        label: "Internet + OTT 24 Apps",
-        hasOtt: true,
-        speeds: [
-          { speed: "100 Mbps", Monthly: { total: 1100, eff: 1100 }, Quarterly: { total: 3000, eff: 1000 }, "Half-Yearly": { total: 5700, eff: 950 }, Yearly: { total: 10800, eff: 900 } },
-          { speed: "150 Mbps", Monthly: { total: 1200, eff: 1200 }, Quarterly: { total: 3300, eff: 1100 }, "Half-Yearly": { total: 6300, eff: 1050 }, Yearly: { total: 12000, eff: 1000 } },
-          { speed: "200 Mbps", Monthly: { total: 1300, eff: 1300 }, Quarterly: { total: 3600, eff: 1200 }, "Half-Yearly": { total: 6750, eff: 1125 }, Yearly: { total: 12600, eff: 1050 } },
-          { speed: "300 Mbps", Monthly: { total: 1800, eff: 1800 }, Quarterly: { total: 5100, eff: 1700 }, "Half-Yearly": { total: 9600, eff: 1600 }, Yearly: { total: 18000, eff: 1500 } },
-          { speed: "500 Mbps", Monthly: { total: 2800, eff: 2800 }, Quarterly: { total: 7950, eff: 2650 }, "Half-Yearly": { total: 15000, eff: 2500 }, Yearly: { total: 28800, eff: 2400 } },
-          { speed: "1000 Mbps", Monthly: { total: 4300, eff: 4300 }, Quarterly: { total: 12450, eff: 4150 }, "Half-Yearly": { total: 23100, eff: 3850 }, Yearly: { total: 42600, eff: 3550 } },
-        ],
-      },
-      {
-        label: "Internet + IPTV",
-        hasOtt: false,
-        speeds: [
-          { speed: "100 Mbps", Monthly: { total: 1399, eff: 1399 }, Quarterly: { total: 3747, eff: 1249 }, "Half-Yearly": { total: 7194, eff: 1199 }, Yearly: { total: 13788, eff: 1149 } },
-          { speed: "200 Mbps", Monthly: { total: 1899, eff: 1899 }, Quarterly: { total: 4497, eff: 1499 }, "Half-Yearly": { total: 8544, eff: 1424 }, Yearly: { total: 15888, eff: 1324 } },
-          { speed: "300 Mbps", Monthly: { total: 1999, eff: 1999 }, Quarterly: { total: 5697, eff: 1899 }, "Half-Yearly": { total: 10794, eff: 1799 }, Yearly: { total: 20388, eff: 1699 } },
-        ],
-      },
-      {
-        label: "Internet + OTT + IPTV 24 Apps",
-        hasOtt: true,
-        speeds: [
-          { speed: "100 Mbps", Monthly: { total: 1449, eff: 1449 }, Quarterly: { total: 4047, eff: 1349 }, "Half-Yearly": { total: 7794, eff: 1299 }, Yearly: { total: 14988, eff: 1249 } },
-          { speed: "200 Mbps", Monthly: { total: 1999, eff: 1999 }, Quarterly: { total: 4647, eff: 1549 }, "Half-Yearly": { total: 8844, eff: 1474 }, Yearly: { total: 16788, eff: 1399 } },
-          { speed: "300 Mbps", Monthly: { total: 2199, eff: 2199 }, Quarterly: { total: 5997, eff: 1999 }, "Half-Yearly": { total: 11394, eff: 1899 }, Yearly: { total: 21588, eff: 1799 } },
-        ],
-      },
-    ],
-  },
-];
-
-// Hero card "starts from" prices — Internet+OTT 100 Mbps effective/month per cycle
-const HERO_PRICES = {
-  Monthly: { lite: 800, prime: 850, max: 1100 },
-  Quarterly: { lite: 750, prime: 800, max: 1000 },
-  "Half-Yearly": { lite: 700, prime: 750, max: 950 },
-  Yearly: { lite: 650, prime: 700, max: 900 },
-};
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -190,6 +18,37 @@ function applyGst(value, gstOn) {
 
 function fmtINR(value) {
   return "₹" + value.toLocaleString("en-IN");
+}
+
+// Reshapes one row from GET /api/plans into what the UI below expects:
+// { id, tier, name, meta, featured, ottCount, ottApps, subPlans: [
+//     { label, hasOtt, speeds: [ { speed, Monthly: {total,eff}, Quarterly: {...}, ... } ] }
+// ] }
+function transformPlan(plan) {
+  return {
+    id: plan.id,
+    tier: plan.tier,
+    name: plan.name,
+    meta: plan.meta,
+    featured: plan.featured,
+    ottCount: plan.ott_count,
+    ottApps: plan.ott_apps || [],
+    subPlans: (plan.sub_plans || []).map((sp) => ({
+      label: sp.label,
+      hasOtt: sp.has_ott,
+      speeds: (sp.speed_tiers || []).map((tier) => {
+        const row = { speed: tier.speed_label };
+        (tier.pricing || []).forEach((p) => {
+          // NUMERIC columns come back as strings over JSON - convert once, here.
+          row[p.billing_cycle] = {
+            total: Number(p.total_amount),
+            eff: Number(p.effective_monthly),
+          };
+        });
+        return row;
+      }),
+    })),
+  };
 }
 
 // ─── Toggle ───────────────────────────────────────────────────────────────────
@@ -222,10 +81,26 @@ function Toggle({ on, onToggle }) {
   );
 }
 
+// ─── Spinner ──────────────────────────────────────────────────────────────────
+
+function Spinner() {
+  return (
+    <>
+      <style>{`@keyframes sf-spin { to { transform: rotate(360deg); } }`}</style>
+      <div style={{
+        width: 32, height: 32,
+        border: "3px solid #fed7aa",
+        borderTopColor: "#f97316",
+        borderRadius: "50%",
+        animation: "sf-spin 0.8s linear infinite",
+      }} />
+    </>
+  );
+}
+
 // ─── OTT Modal ────────────────────────────────────────────────────────────────
 
-function OttModal({ planId, onClose }) {
-  const apps = OTT_APPS[planId] || [];
+function OttModal({ apps, onClose }) {
   return (
     <div
       onClick={onClose}
@@ -285,7 +160,7 @@ function OttModal({ planId, onClose }) {
 
 // ─── Shared Header ────────────────────────────────────────────────────────────
 
-function PlanHeader({ activeTab, setActiveTab, gstOn, setGstOn, showBack }) {
+function PlanHeader({ activeTab, setActiveTab, gstOn, setGstOn }) {
   return (
     <div>
 
@@ -385,12 +260,12 @@ function PlanHeader({ activeTab, setActiveTab, gstOn, setGstOn, showBack }) {
 
 // ─── All Plans Page ───────────────────────────────────────────────────────────
 
-function SubPlanCard({ subPlan, planId, activeTab, gstOn }) {
+function SubPlanCard({ subPlan, apps, activeTab, gstOn }) {
   const [showOtt, setShowOtt] = useState(false);
 
   return (
     <>
-      {showOtt && <OttModal planId={planId} onClose={() => setShowOtt(false)} />}
+      {showOtt && <OttModal apps={apps} onClose={() => setShowOtt(false)} />}
       <div style={{
         background: "#fafafa",
         border: "0.5px solid #ebebeb",
@@ -431,6 +306,7 @@ function SubPlanCard({ subPlan, planId, activeTab, gstOn }) {
         <div style={{ flex: 1 }}>
           {subPlan.speeds.map((row, i) => {
             const cycleData = row[activeTab];
+            if (!cycleData) return null;
             const totalDisplay = fmtINR(applyGst(cycleData.total, gstOn));
             const effDisplay = fmtINR(applyGst(cycleData.eff, gstOn));
             return (
@@ -469,7 +345,7 @@ function SubPlanCard({ subPlan, planId, activeTab, gstOn }) {
   );
 }
 
-function AllPlansPage({ activeTab, gstOn }) {
+function AllPlansPage({ plans, activeTab, gstOn }) {
   return (
     <div>
       <p style={{ textAlign: "center", fontSize: 13, color: "#888", marginBottom: "2rem" }}>
@@ -478,7 +354,7 @@ function AllPlansPage({ activeTab, gstOn }) {
       </p>
 
       <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
-        {PLANS.map((plan) => (
+        {plans.map((plan) => (
           <div
             key={plan.id}
             style={{
@@ -555,7 +431,7 @@ function AllPlansPage({ activeTab, gstOn }) {
                   <SubPlanCard
                     key={sp.label}
                     subPlan={sp}
-                    planId={plan.id}
+                    apps={plan.ottApps}
                     activeTab={activeTab}
                     gstOn={gstOn}
                   />
@@ -576,9 +452,32 @@ function AllPlansPage({ activeTab, gstOn }) {
 // ─── Root ─────────────────────────────────────────────────────────────────────
 
 export default function SunFiberPlans() {
-  // const [page, setPage] = useState("main");
   const [activeTab, setActiveTab] = useState("Yearly");
   const [gstOn, setGstOn] = useState(false);
+
+  const [plans, setPlans] = useState(null); // null = still loading
+  const [error, setError] = useState(null);
+
+  const loadPlans = useCallback((signal) => {
+    setError(null);
+    fetch(`${API_BASE_URL}/api/plans`, { signal })
+      .then((res) => {
+        if (!res.ok) throw new Error(`Server responded with ${res.status}`);
+        return res.json();
+      })
+      .then((data) => setPlans(data.map(transformPlan)))
+      .catch((err) => {
+        if (err.name !== "AbortError") {
+          setError(err.message || "Could not load plans");
+        }
+      });
+  }, []);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    loadPlans(controller.signal);
+    return () => controller.abort();
+  }, [loadPlans]);
 
   return (
     <section style={{
@@ -595,10 +494,40 @@ export default function SunFiberPlans() {
         setGstOn={setGstOn}
       />
 
-      <AllPlansPage
-        activeTab={activeTab}
-        gstOn={gstOn}
-      />
+      {error ? (
+        <div style={{ textAlign: "center", padding: "4rem 1rem" }}>
+          <p style={{ fontSize: 14, color: "#c2440a", fontWeight: 600, marginBottom: 8 }}>
+            Couldn&apos;t load plans
+          </p>
+          <p style={{ fontSize: 13, color: "#888", marginBottom: 16 }}>{error}</p>
+          <button
+            onClick={() => loadPlans()}
+            style={{
+              background: "#f97316", color: "#fff",
+              border: "none", borderRadius: 8,
+              padding: "8px 20px", fontSize: 13,
+              fontWeight: 600, cursor: "pointer",
+            }}
+          >
+            Try again
+          </button>
+        </div>
+      ) : plans === null ? (
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12, padding: "4rem 0" }}>
+          <Spinner />
+          <p style={{ fontSize: 13, color: "#888" }}>Loading current plans…</p>
+        </div>
+      ) : plans.length === 0 ? (
+        <p style={{ textAlign: "center", fontSize: 13, color: "#888", padding: "4rem 0" }}>
+          No plans are available right now. Check back soon.
+        </p>
+      ) : (
+        <AllPlansPage
+          plans={plans}
+          activeTab={activeTab}
+          gstOn={gstOn}
+        />
+      )}
     </section>
   );
 }
